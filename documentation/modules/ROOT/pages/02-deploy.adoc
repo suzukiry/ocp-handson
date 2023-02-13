@@ -65,7 +65,7 @@ ClusterTaskは、Tekton Catalogの一部がデフォルトで登録されてい�
 .. 表示されたデフォルトの YAML 定義を次のように置き換えます
 +
 [.console-input]
-[source,bash,subs="attributes+,+macros"]
+[source,yaml,subs="attributes+,+macros"]
 ----
 apiVersion: tekton.dev/v1beta1
 kind: Task
