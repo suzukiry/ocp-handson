@@ -42,7 +42,7 @@ Taskが登録されていないことがわかります。
 
 . ClusterTaskの一覧を表示
 +
-[source,bash]
+[source,bash,subs="attributes+,+macros"]
 ----
 tkn clustertask list
 ----
