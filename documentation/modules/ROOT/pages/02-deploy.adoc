@@ -53,21 +53,6 @@ tkn clustertask list
 ClusterTaskは、Tekton Catalogの一部がデフォルトで登録されていることがわかります。
 ====
 
-. その他の役立つコマンドとして、`kubens`をダウンロード・インストール
-+
-[.console-input]
-[source,bash,subs="attributes+,+macros"]
-----
-git clone https://github.com/ahmetb/kubectx.git
-sudo install ./kubectx/kubens /usr/local/bin/
-kubens -c
-----
-+
-[NOTE]
-====
-namespaceの切り替えに便利です。
-====
-
 == 簡単なパイプラインのデプロイ
 
 `trivial-pipeline` プロジェクトの作成
