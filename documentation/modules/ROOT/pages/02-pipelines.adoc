@@ -1,14 +1,10 @@
-
-:labname: Pipelines
-
-{labname} Lab
-
-= はじめに
 include::_attributes.adoc[]
 
-Red Hat OpenShift Pipelinesは、Kubernetesリソースに基づくクラウドネイティブの継続的インテグレーションおよび継続的デリバリー（CI / CD）ソリューションです。
+== はじめに
 
-Tektonビルディングブロックを使用して、基盤となる実装の詳細を抽象化することにより、複数のプラットフォームにわたる展開を自動化します。
+Red Hat OpenShift Pipelinesは、Kubernetesリソースに基づくクラウドネイティブの継続的インテグレーションおよび継続的デリバリー（CI/CD）ソリューションです。
+
+Tekton ビルディングブロックを使用して、基盤となる実装の詳細を抽象化することにより、複数のプラットフォームにわたる展開を自動化します。
 
 Tektonは、Kubernetesディストリビューション間で移植可能なCI / CDパイプラインを定義するためのいくつかの標準カスタムリソース定義（CRD）を導入しています。 
 
