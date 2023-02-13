@@ -1,3 +1,5 @@
+include::_attributes.adoc[]
+
 
 :labname: Pipelines
 
@@ -22,11 +24,12 @@ OpenShift Pipelines Operatorはすでにデプロイされているため、す�
 * 簡単なパイプラインのデプロイ
 * ビルドパイプラインのデプロイ
 
-= 準備
-== OpenShift Pipelines のインストール 
+[#prerequisite]
+== 準備
+=== OpenShift Pipelines のインストール 
 あとで書く。
 
-== tkn コマンドなどのインストール （オプション）
+=== tkn コマンドなどのインストール （オプション）
 今回のLabでは tkn コマンドは使いませんが、利用イメージをご紹介します。
 
 . tkn コマンドのインストール
@@ -67,6 +70,7 @@ tkn clustertask list
 ClusterTaskは、Tekton Catalogの一部がデフォルトで登録されていることがわかります。
 ====
 
+[#sample]
 == 簡単なパイプラインのデプロイ
 
 `trivial-pipeline` プロジェクトの作成
@@ -127,6 +131,7 @@ spec:
 +
 . *ログ* タブをクリックし実行したタスクを確認します。"Hello World" が表示されていると思います。
 
+[#createtask]
 == Golang の 2 Tier アプリケーションのデプロイ
 
 === リソースを定義するタスクを作成する
@@ -242,6 +247,7 @@ spec:
 +
 . [blue-background white]#Create# をクリックします。
 
+[#createpvc]
 === Workspaceのデータを保存する、Persistent Volume Claim リソースの作成
 
 * *Task* のパラメータと結果の出力は、Tektonによって専用の永続的なボリューム・クレームに自動的に保存されます。
@@ -271,7 +277,7 @@ spec:
     requests:
       storage: 500Mi
 ----
-
+[#createpipeline]
 === 自前のアプリのビルド・デプロイ パイプラインを作成する
 
 今作成中のパイプラインは３つの大きいセクションと、４つの *Task* で構成されています。
@@ -388,6 +394,7 @@ spec:
 
 . [blue-background white]#Create# をクリックします。
 
+[#runpipeline]
 === VotingアプリのバックエンドAPI用のパイプラインを実行します
 
 さて、お楽しみの時間です！Votingアプリのバックエンド部分のパイプラインを実行してみましょう。
