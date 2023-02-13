@@ -30,7 +30,7 @@ OpenShift Pipelines Operatorはすでにデプロイされているため、す�
 . Taskの一覧を表示
 +
 [.console-input]
-[source,bash]
+[source,bash,subs="attributes+,+macros"]
 ----
 tkn task list
 ----
