@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://redhat-scholars.github.io/course-template/ocp-handson/01-setup.html</loc>
-<lastmod>2023-02-13T09:28:33.820Z</lastmod>
+<loc>https://suzukiry.github.io/ocp-handson/ocp-handson/01-setup.html</loc>
+<lastmod>2023-02-13T09:35:08.729Z</lastmod>
 </url>
 <url>
-<loc>https://redhat-scholars.github.io/course-template/ocp-handson/02-pipelines.html</loc>
-<lastmod>2023-02-13T09:28:33.820Z</lastmod>
+<loc>https://suzukiry.github.io/ocp-handson/ocp-handson/02-pipelines.html</loc>
+<lastmod>2023-02-13T09:35:08.729Z</lastmod>
 </url>
 <url>
-<loc>https://redhat-scholars.github.io/course-template/ocp-handson/03-gitops.html</loc>
-<lastmod>2023-02-13T09:28:33.820Z</lastmod>
+<loc>https://suzukiry.github.io/ocp-handson/ocp-handson/03-gitops.html</loc>
+<lastmod>2023-02-13T09:35:08.729Z</lastmod>
 </url>
 <url>
-<loc>https://redhat-scholars.github.io/course-template/ocp-handson/index.html</loc>
-<lastmod>2023-02-13T09:28:33.820Z</lastmod>
+<loc>https://suzukiry.github.io/ocp-handson/ocp-handson/index.html</loc>
+<lastmod>2023-02-13T09:35:08.729Z</lastmod>
 </url>
 </urlset>
