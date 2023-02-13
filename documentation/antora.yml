@@ -1,5 +1,5 @@
-name: template-tutorial
-title: Template Tutorial
+name: ocp-handson
+title: OpenShift Handson
 version: master
 nav:
   - modules/ROOT/nav.adoc
