@@ -1,8 +1,4 @@
-:labname: GitOps
-
- {labname} Lab
-
-:numbered:
+include::_attributes.adoc[]
 
 == はじめに
 
@@ -17,6 +13,7 @@
 
 では始めましょう！
 
+[#prerequisite]
 == GitOps Operator のインストールと確認
 
 メールに記載されているユーザー名とパスワードを使用して、OpenShiftクラスターのWebコンソールにログインします。
