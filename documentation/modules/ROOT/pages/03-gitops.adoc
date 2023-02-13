@@ -194,7 +194,7 @@ NOTE: kustomization.yamlを確認した通りの差分があるか確認しま�
 
 . 左側のナビゲーションパネルにある歯車のアイコンを使用して、ArgoCD Webコンソールから AppProject 管理インターフェイスにアクセスします。
 +
-image::images/argocd_manage_projects.png[width=50%]
+image::gitops/argocd_manage_projects.png[width=50%]
 +
 . *Projects* をクリックし、次に *New Project* を選択。`coffee-shop` と言う名前の新しいプロジェクトを作成します
 . `coffee-shop` と入力し、*Create* をクリックします
@@ -213,7 +213,7 @@ NOTE: `prod-coffeeshop` ネームスペースがきちんと指定されてい�
 . *Save* をクリック
 . 左のナビゲーションバーから *Manage Applications* アイコンをクリック
 +
-image::images/argocd_manage_applications.png[width=50%]
+image::gitops/argocd_manage_applications.png[width=50%]
 
 これで、新しい ArgoCD の *applications* を OpenShift のアプリケーション管理に紐づけるための project を作成する事が出来ました。
 
@@ -274,7 +274,7 @@ NOTE: アプリの定義に何か問題がある場合は、here: https://github
 . [gray-background white]#CREATE# をクリックし、次に [gray-background white]#SYNC# をクリックし、さらに [gray-background white]#SYNCHRONIZE# をクリックします（今回のApplicationは自動同期の設定がされているため、自動でSYNCされます。）
 . アプリケーション名をクリックし、アプリケーションのすべての部分の表現を確認して、アプリケーションがどのように展開されるかを確認します。
 +
-image::images/argo-coffee-shop-deploy.png[]
+image::gitops/argo-coffee-shop-deploy.png[]
 
 アプリケーションコンポーネントが正常にデプロイされたら、アプリケーションを削除します。次の演習で、ApplicationSet という単一のオブジェクトを使って複数のコンポーネントをデプロイするためです。
 *coffee-shop* アプリケーションの  *DELETE* をクリックして `coffee-shop` アプリケーションを削除します。
@@ -397,7 +397,7 @@ ArgoCD のデフォルト設定は非常に保守的であり、同期自動化�
 . `- dev-coffeeshop` の直後に `- prod-coffeeshop` を追加します
 . 以下の様になります:
 +
-image:images/logging_prod_coffeeshop_yaml.png[width=50%]
+image:gitops/logging_prod_coffeeshop_yaml.png[width=50%]
 +
 . 保存をクリックし完了です！
 
