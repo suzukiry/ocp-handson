@@ -27,6 +27,18 @@ OpenShift Pipelines Operatorはすでにデプロイされているため、す�
 == tkn コマンドなどのインストール (補足)
 今回のLabでは tkn コマンドは使いませんが、利用イメージをご紹介します。
 
+. tkn コマンドのインストール
++
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+mkdir tkn
+cd tkn
+wget https://mirror.openshift.com/pub/openshift-v4/clients/pipeline/1.9.0/tkn-linux-amd64.tar.gz
+tar xvzf tkn-linux-amd64.tar.gz
+export PATH=$PATH:$HOME/tkn
+----
+
 . Taskの一覧を表示
 +
 [.console-input]
