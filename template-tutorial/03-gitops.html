@@ -91,13 +91,9 @@
   </div>
   <div class="content">
 <article class="doc">
-<div class="paragraph">
-<p>Unresolved include directive in modules/ROOT/pages/03-gitops.adoc - include::../include/00_0_Lab_Header.adoc[]</p>
-</div>
-<div class="sect1">
-<h2 id="_gitops_lab"><a class="anchor" href="#_gitops_lab"></a>GitOps Lab</h2>
-<div class="sectionbody">
-
+<div class="literalblock">
+<div class="content">
+<pre>{labname} Lab</pre>
 </div>
 </div>
 <div class="sect1">
@@ -279,9 +275,9 @@ ArgoCD はまだ OpenShift と認証システムが統合されていません
 <ol class="arabic">
 <li>
 <p>Kustomizeをインストールします。</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
 
 sudo install ./kustomize /usr/bin</code></pre>
 </div>
@@ -289,9 +285,9 @@ sudo install ./kustomize /usr/bin</code></pre>
 </li>
 <li>
 <p>バージョンを確認します。</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">kustomize version</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kustomize version</code></pre>
 </div>
 </div>
 </li>
@@ -307,9 +303,9 @@ sudo install ./kustomize /usr/bin</code></pre>
 <ol class="arabic">
 <li>
 <p>レポジトリをクローンします。</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">git clone https://github.com/RH-OPEN/test-example.git
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/RH-OPEN/test-example.git" class="bare">https://github.com/RH-OPEN/test-example.git</a>
 
 cd test-example/coffee-shop-kustomize/coffee-shop</code></pre>
 </div>
@@ -317,9 +313,9 @@ cd test-example/coffee-shop-kustomize/coffee-shop</code></pre>
 </li>
 <li>
 <p>ディレクトリ構成を確認します。</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">tree
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tree
 .
 |-- base
 |   |-- deployment.yaml
@@ -351,9 +347,9 @@ base と overlays 配下のkustomization.yamlによって管理されている�
 </li>
 <li>
 <p>base/kustomization.yaml の内容から、変更箇所を確認します。</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cat base/kustomization.yaml
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat base/kustomization.yaml
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
@@ -383,9 +379,9 @@ commonLabels:
 </li>
 <li>
 <p>overlays/production/kustomization.yaml の内容から、変更箇所を確認します。</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sh hljs" data-lang="sh">cat overlays/production/kustomization.yaml
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat overlays/production/kustomization.yaml
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
@@ -429,9 +425,9 @@ metadata.name、namespaceが変更・追加され、*-patches.yamlによって�
 <div class="paragraph">
 <p>kustomize コマンド を実行して、適用後のマニフェストを確認しましょう。</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">diff -su &lt;(kustomize build base) &lt;(kustomize build overlays/production)</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">diff -su &lt;(kustomize build base) &lt;(kustomize build overlays/production)</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -561,7 +557,7 @@ OpenShift GitOps Operator が稼働するローカルサーバーとなるため
 </li>
 <li>
 <p>次のマニフェストをコピーして貼り付けます::</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -570,12 +566,12 @@ metadata:
   namespace: openshift-gitops
 spec:
   destination:
-    server: https://kubernetes.default.svc
+    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
     namespace: prod-coffeeshop
   project: coffee-shop
   source:
     path: ./coffee-shop-kustomize/coffee-shop/overlays/production
-    repoURL: https://github.com/RH-OPEN/test-example.git
+    repoURL: <a href="https://github.com/RH-OPEN/test-example.git" class="bare">https://github.com/RH-OPEN/test-example.git</a>
     targetRevision: HEAD
   syncPolicy:
     automated: # automated sync by default retries failed attempts 5 times with following delays between attempts ( 5s, 10s, 20s, 40s, 80s ); retry controlled using `retry` field.
@@ -678,7 +674,7 @@ ArgoCD の web コンソールは閉じないでください！</p>
 </li>
 <li>
 <p>OpenShiftコンソールの右上にあるプラス記号 <strong><span class="big white black-background">&CirclePlus;</span></strong> をクリックして、アプリケーションの ArgoCD アプリケーションセットの次の YAML マニフェストをインポートします。</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -688,7 +684,7 @@ metadata:
 spec:
   generators:
   - git:
-      repoURL: https://github.com/RH-OPEN/test-example.git
+      repoURL: <a href="https://github.com/RH-OPEN/test-example.git" class="bare">https://github.com/RH-OPEN/test-example.git</a>
       revision: HEAD
       directories:
       - path: coffee-shop-kustomize/*
@@ -698,11 +694,11 @@ spec:
     spec:
       project: coffee-shop
       source:
-        repoURL: https://github.com/RH-OPEN/test-example.git
+        repoURL: <a href="https://github.com/RH-OPEN/test-example.git" class="bare">https://github.com/RH-OPEN/test-example.git</a>
         targetRevision: HEAD
         path: '{{path}}/overlays/production/'
       destination:
-        server: https://kubernetes.default.svc
+        server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
         namespace: prod-coffeeshop
       syncPolicy:
         automated: # automated sync by default retries failed attempts 5 times with following delays between attempts ( 5s, 10s, 20s, 40s, 80s ); retry controlled using `retry` field.
