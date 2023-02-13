@@ -101,13 +101,8 @@
   </div>
   <div class="content">
 <article class="doc">
-<div class="literalblock">
-<div class="content">
-<pre>{labname} Lab</pre>
-</div>
-</div>
 <div class="sect1">
-<h2 id="_はじめに"><a class="anchor" href="#_はじめに"></a>1. はじめに</h2>
+<h2 id="_はじめに"><a class="anchor" href="#_はじめに"></a>はじめに</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>このラボでは、GitOpsオペレーターをデプロイし、それを使用してCoffeeShopアプリケーションを <code>prod-coffeeshop</code> プロジェクトにデプロイします。 Coffee-Shopアプリケーションは、YAMLマニフェストおよびkustomizeファイルとしてgitリポジトリに保存されます。 kustomizeがどのように機能するかの詳細については、そのgitリポジトリを調べる必要があります。</p>
@@ -127,7 +122,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_gitops_operator_のインストールと確認"><a class="anchor" href="#_gitops_operator_のインストールと確認"></a>2. GitOps Operator のインストールと確認</h2>
+<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>GitOps Operator のインストールと確認</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>メールに記載されているユーザー名とパスワードを使用して、OpenShiftクラスターのWebコンソールにログインします。</p>
@@ -148,7 +143,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_web_ui_を使った_argocd_へのアクセス"><a class="anchor" href="#_web_ui_を使った_argocd_へのアクセス"></a>3. Web UI を使った ArgoCD へのアクセス</h2>
+<h2 id="_web_ui_を使った_argocd_へのアクセス"><a class="anchor" href="#_web_ui_を使った_argocd_へのアクセス"></a>Web UI を使った ArgoCD へのアクセス</h2>
 <div class="sectionbody">
 <div class="admonitionblock note">
 <table>
@@ -202,7 +197,7 @@ ArgoCD はまだ OpenShift と認証システムが統合されていません
 </ol>
 </div>
 <div class="sect2">
-<h3 id="_argocd_のprojectsapplicationsapplication_set_について"><a class="anchor" href="#_argocd_のprojectsapplicationsapplication_set_について"></a>3.1. ArgoCD のProjects、Applications、Application Set について</h3>
+<h3 id="_argocd_のprojectsapplicationsapplication_set_について"><a class="anchor" href="#_argocd_のprojectsapplicationsapplication_set_について"></a>ArgoCD のProjects、Applications、Application Set について</h3>
 <div class="paragraph">
 <p>ArgoCD の <strong>Projects</strong> は OpenShift のプロジェクトとは異なります。</p>
 </div>
@@ -266,17 +261,17 @@ ArgoCD はまだ OpenShift と認証システムが統合されていません
 </div>
 </div>
 <div class="sect1">
-<h2 id="_kustomize_の動作確認"><a class="anchor" href="#_kustomize_の動作確認"></a>4. Kustomize の動作確認</h2>
+<h2 id="_kustomize_の動作確認"><a class="anchor" href="#_kustomize_の動作確認"></a>Kustomize の動作確認</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>今回の Argo CD によって導入する Application では、Kustomize を利用しています。Kustomize でどのようにマニフェストが管理・変更されているのか確認しましょう。</p>
 </div>
 <div class="sect2">
-<h3 id="_踏み台サーバにログインをします"><a class="anchor" href="#_踏み台サーバにログインをします"></a>4.1. 踏み台サーバにログインをします</h3>
+<h3 id="_踏み台サーバにログインをします"><a class="anchor" href="#_踏み台サーバにログインをします"></a>踏み台サーバにログインをします</h3>
 
 </div>
 <div class="sect2">
-<h3 id="_kustomize_のインストール"><a class="anchor" href="#_kustomize_のインストール"></a>4.2. Kustomize のインストール</h3>
+<h3 id="_kustomize_のインストール"><a class="anchor" href="#_kustomize_のインストール"></a>Kustomize のインストール</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -308,7 +303,7 @@ sudo install ./kustomize /usr/bin</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_kustomization_yaml_の確認"><a class="anchor" href="#_kustomization_yaml_の確認"></a>4.3. Kustomization.yaml の確認</h3>
+<h3 id="_kustomization_yaml_の確認"><a class="anchor" href="#_kustomization_yaml_の確認"></a>Kustomization.yaml の確認</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -431,7 +426,7 @@ metadata.name、namespaceが変更・追加され、*-patches.yamlによって�
 </div>
 </div>
 <div class="sect2">
-<h3 id="_kustomization_yaml_の確認_2"><a class="anchor" href="#_kustomization_yaml_の確認_2"></a>4.4. Kustomization.yaml の確認</h3>
+<h3 id="_kustomization_yaml_の確認_2"><a class="anchor" href="#_kustomization_yaml_の確認_2"></a>Kustomization.yaml の確認</h3>
 <div class="paragraph">
 <p>kustomize コマンド を実行して、適用後のマニフェストを確認しましょう。</p>
 </div>
@@ -456,7 +451,7 @@ kustomization.yamlを確認した通りの差分があるか確認しましょ�
 </div>
 </div>
 <div class="sect1">
-<h2 id="_coffee_shop_app_project_の準備"><a class="anchor" href="#_coffee_shop_app_project_の準備"></a>5. Coffee-Shop "App Project" の準備</h2>
+<h2 id="_coffee_shop_app_project_の準備"><a class="anchor" href="#_coffee_shop_app_project_の準備"></a>Coffee-Shop "App Project" の準備</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -545,7 +540,7 @@ OpenShift GitOps Operator が稼働するローカルサーバーとなるため
 </div>
 </div>
 <div class="sect1">
-<h2 id="_coffee_shop_application_を_production_ネームスペースにデプロイする"><a class="anchor" href="#_coffee_shop_application_を_production_ネームスペースにデプロイする"></a>6. Coffee Shop Application を Production ネームスペースにデプロイする</h2>
+<h2 id="_coffee_shop_application_を_production_ネームスペースにデプロイする"><a class="anchor" href="#_coffee_shop_application_を_production_ネームスペースにデプロイする"></a>Coffee Shop Application を Production ネームスペースにデプロイする</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Coffee Shopには、データベース、Coffee Shopのフロントエンドと注文管理システム、および準備から収集までのすべての注文の状態を管理する Barista サービスの3つのコンポーネントがあります。</p>
@@ -653,7 +648,7 @@ spec:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_argocd_application_set_を使って_barista_コンポーネントを_knative_サービスとしてデプロイする"><a class="anchor" href="#_argocd_application_set_を使って_barista_コンポーネントを_knative_サービスとしてデプロイする"></a>7. ArgoCD Application Set を使って Barista コンポーネントを Knative サービスとしてデプロイする</h2>
+<h2 id="_argocd_application_set_を使って_barista_コンポーネントを_knative_サービスとしてデプロイする"><a class="anchor" href="#_argocd_application_set_を使って_barista_コンポーネントを_knative_サービスとしてデプロイする"></a>ArgoCD Application Set を使って Barista コンポーネントを Knative サービスとしてデプロイする</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>ここでは、OpenShift GitOps ArgoCD の新機能である Application Sets を使用します。</p>
@@ -748,7 +743,7 @@ spec:
 </ol>
 </div>
 <div class="sect2">
-<h3 id="_アプリケーションの同期"><a class="anchor" href="#_アプリケーションの同期"></a>7.1. アプリケーションの同期</h3>
+<h3 id="_アプリケーションの同期"><a class="anchor" href="#_アプリケーションの同期"></a>アプリケーションの同期</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -778,7 +773,7 @@ spec:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_アプリケーション設定を変更しargocd_で正しく設定されることを確認する"><a class="anchor" href="#_アプリケーション設定を変更しargocd_で正しく設定されることを確認する"></a>8. アプリケーション設定を変更し、ArgoCD で正しく設定されることを確認する</h2>
+<h2 id="_アプリケーション設定を変更しargocd_で正しく設定されることを確認する"><a class="anchor" href="#_アプリケーション設定を変更しargocd_で正しく設定されることを確認する"></a>アプリケーション設定を変更し、ArgoCD で正しく設定されることを確認する</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>ArgoCD はソースとデプロイ先の変更を監視します
@@ -840,7 +835,7 @@ ArgoCD のデフォルト設定は非常に保守的であり、同期自動化�
 ログがどのように変化したかを見てみましょう。</p>
 </div>
 <div class="sect1">
-<h2 id="_prod_coffeeshop_ネームスペースを_clusterlogforwarder_に追加しましょう"><a class="anchor" href="#_prod_coffeeshop_ネームスペースを_clusterlogforwarder_に追加しましょう"></a>1. <code>prod-coffeeshop</code> ネームスペースを <code>ClusterLogForwarder</code> に追加しましょう。</h2>
+<h2 id="_prod_coffeeshop_ネームスペースを_clusterlogforwarder_に追加しましょう"><a class="anchor" href="#_prod_coffeeshop_ネームスペースを_clusterlogforwarder_に追加しましょう"></a><code>prod-coffeeshop</code> ネームスペースを <code>ClusterLogForwarder</code> に追加しましょう。</h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
@@ -882,7 +877,7 @@ ArgoCD のデフォルト設定は非常に保守的であり、同期自動化�
 </div>
 </div>
 <div class="sect1">
-<h2 id="_新しいログを調べる"><a class="anchor" href="#_新しいログを調べる"></a>2. 新しいログを調べる</h2>
+<h2 id="_新しいログを調べる"><a class="anchor" href="#_新しいログを調べる"></a>新しいログを調べる</h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
