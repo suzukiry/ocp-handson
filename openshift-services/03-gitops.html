@@ -198,65 +198,9 @@ ArgoCD はまだ OpenShift と認証システムが統合されていません
 </ol>
 </div>
 <div class="sect2">
-<h3 id="_argocd_のprojectsapplicationsapplication_set_について"><a class="anchor" href="#_argocd_のprojectsapplicationsapplication_set_について"></a>ArgoCD のProjects、Applications、Application Set について</h3>
+<h3 id="_project_作成"><a class="anchor" href="#_project_作成"></a>Project 作成</h3>
 <div class="paragraph">
-<p>ArgoCD の <strong>Projects</strong> は OpenShift のプロジェクトとは異なります。</p>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Argocd の project</dt>
-<dd>
-<div class="ulist">
-<ul>
-<li>
-<p>Sources: git や Helm レポジトリ―の様なアプリケーション構成の YAML マニフェスト</p>
-</li>
-<li>
-<p>Destinations: ソースがデプロイされる OpenShift サーバー、ネームスペース、およびそれらのユーザー</p>
-</li>
-<li>
-<p>SyncPolicy: ArgoCD がソースとデプロイ先の同期を維持する方法に関して定義します</p>
-</li>
-<li>
-<p>Tool: Kustomize やスクリプトなど
-アプリケーション構成設定（YAMLやHelmなど）を特定のデプロイ先の詳細に変換するツール。 例えば: ホストネーム、ポート、シークレット、コンテナイメージレジストリーなど</p>
-</li>
-</ul>
-</div>
-</dd>
-<dt class="hdlist1">Argocd の Application</dt>
-<dd>
-<div class="ulist">
-<ul>
-<li>
-<p>Namespace</p>
-</li>
-<li>
-<p>Deployment</p>
-</li>
-<li>
-<p>Service</p>
-</li>
-<li>
-<p>Route</p>
-</li>
-</ul>
-</div>
-</dd>
-<dt class="hdlist1">ArgoCD の Application Sets</dt>
-<dd>
-<div class="ulist">
-<ul>
-<li>
-<p>ArgoCD内のマルチクラスターサポートとクラスターマルチテナントサポート</p>
-</li>
-<li>
-<p>アプリケーションは、Git または Argo CD 独自に定義されたクラスターリストなど、複数の異なるソースからテンプレート化される場合があります。</p>
-</li>
-</ul>
-</div>
-</dd>
-</dl>
+<p>prod-coffeeshop</p>
 </div>
 </div>
 </div>
