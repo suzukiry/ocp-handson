@@ -773,12 +773,12 @@ metadata:
 spec:
   params:
   - name: IMAGE
-    <i class="conum" data-value="1"></i><b>(1)</b>
+    #&lt;a&gt;
     value: image-registry.openshift-image-registry.svc:5000/pipelines-vote/vote-ui
   - name: deployment-name
     value: pipelines-vote-ui
   - name: git-url
-    <i class="conum" data-value="2"></i><b>(2)</b>
+    #&lt;b&gt;
     value: <a href="https://github.com/openshift/pipelines-vote-ui.git" class="bare">https://github.com/openshift/pipelines-vote-ui.git</a>
   pipelineRef:
     name: build-and-deploy
@@ -796,10 +796,10 @@ spec:
 <div class="ulist">
 <ul>
 <li>
-<p><code>&lt;1&gt;</code> ビルドが書き込まれるイメージ名と、<strong>Pod</strong> がデプロイされるイメージ名が異なることに注意してください。</p>
+<p><code>&lt;a&gt;</code> ビルドが書き込まれるイメージ名と、<strong>Pod</strong> がデプロイされるイメージ名が異なることに注意してください。</p>
 </li>
 <li>
-<p><code>&lt;2&gt;</code> アプリケーションのフロントエンド用に異なるリポジトリを使用しています。この場合、monorepoはどのように使用されたのでしょうか？</p>
+<p><code>&lt;b&gt;</code> アプリケーションのフロントエンド用に異なるリポジトリを使用しています。この場合、monorepoはどのように使用されたのでしょうか？</p>
 </li>
 </ul>
 </div>
