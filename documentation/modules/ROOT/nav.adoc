@@ -1,7 +1,11 @@
 * xref:01-setup.adoc[1. Setup]
-** xref:01-setup.adoc#prerequisite[Prerequisites]
-** xref:01-setup.adoc#minikube[Setup Minikube]
 
-* xref:02-deploy.adoc[2. Deploy Service]
-** xref:02-deploy.adoc#package[Build Service]
-** xref:02-deploy.adoc#deploy[Deploy Dervice]
+* xref:02-pipelines.adoc[2. OpenShift Pipelines]
+** xref:02-pipelines.adoc#prerequisite[準備]
+** xref:02-pipelines.adoc#sample[サンプル]
+** xref:02-pipelines.adoc#createtask[Task作成]
+** xref:02-pipelines.adoc#createpvc[PVC作成]
+** xref:02-pipelines.adoc#createpipeline[Pipeline作成]
+** xref:02-pipelines.adoc#runpipeline[Pipeline実行]
+
+* xref:03-gitops.adoc[3. OpenShift GitOps]
