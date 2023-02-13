@@ -173,7 +173,7 @@
 </li>
 <li>
 <p>ClusterTaskの一覧を表示</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tkn clustertask list</code></pre>
 </div>
@@ -195,9 +195,9 @@
 </li>
 <li>
 <p>その他の役立つコマンドとして、`kubens`をダウンロード・インストール</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone https://github.com/ahmetb/kubectx.git
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/ahmetb/kubectx.git" class="bare">https://github.com/ahmetb/kubectx.git</a>
 sudo install ./kubectx/kubens /usr/local/bin/
 kubens -c</code></pre>
 </div>
@@ -247,9 +247,9 @@ kubens -c</code></pre>
 </li>
 <li>
 <p>表示されたデフォルトの YAML 定義を次のように置き換えます</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: hello
@@ -288,9 +288,9 @@ spec:
 </li>
 <li>
 <p>デフォルトの YAML を以下のように変更し、作成をクリックします</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">apiVersion: tekton.dev/v1beta1
 kind: TaskRun
 metadata:
   namespace: trivial-pipeline
@@ -336,9 +336,9 @@ spec:
 </li>
 <li>
 <p>デフォルトの YAML を以下のように変更し、作成をクリックします</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># task
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash"># task
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -424,9 +424,9 @@ spec:
 </li>
 <li>
 <p>デフォルトの YAML を以下のように変更し、作成をクリックします</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: update-deployment
@@ -513,9 +513,9 @@ spec:
 </tr>
 </table>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: v1
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: source-pvc
@@ -578,9 +578,9 @@ spec:
 </li>
 <li>
 <p>デフォルトの YAML を以下のように変更し、作成をクリックします</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: build-and-deploy
@@ -702,9 +702,9 @@ spec:
 <p>ナビゲーションバーより <strong>Pipeline</strong> を選択し、<span class="blue-background white">Create</span> &#8594; <strong>PipelineRun</strong> でリソースを作成します
 . デフォルトの YAML を以下のように変更し、作成をクリックします</p>
 </div>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   labels:
@@ -719,7 +719,7 @@ spec:
   - name: deployment-name
     value: pipelines-vote-api
   - name: git-url
-    value: https://github.com/openshift/pipelines-vote-api.git
+    value: <a href="https://github.com/openshift/pipelines-vote-api.git" class="bare">https://github.com/openshift/pipelines-vote-api.git</a>
   # ----- &lt;b&gt; -----
   pipelineRef:
     name: build-and-deploy
@@ -766,9 +766,9 @@ spec:
 <ol class="arabic">
 <li>
 <p>バックエンドのときと同様に、以下の <strong>PipelineRun</strong> 定義を使用してビルドを実行し、アプリケーションをデプロイします。</p>
-<div class="listingblock">
+<div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: tekton.dev/v1beta1
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   generateName: build-and-deploy-run-frontendapp-
@@ -784,7 +784,7 @@ spec:
     value: pipelines-vote-ui
   - name: git-url
     <i class="conum" data-value="2"></i><b>(2)</b>
-    value: https://github.com/openshift/pipelines-vote-ui.git
+    value: <a href="https://github.com/openshift/pipelines-vote-ui.git" class="bare">https://github.com/openshift/pipelines-vote-ui.git</a>
   pipelineRef:
     name: build-and-deploy
   serviceAccountName: pipeline
