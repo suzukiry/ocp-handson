@@ -3,8 +3,8 @@ runtime:
 
 site:
   title: OpenShift Handson
-  url: https://redhat-scholars.github.io/course-template
-  start_page: template-tutorial::index.adoc
+  url: https://suzukiry.github.io/ocp-handson
+  start_page: ocp-handson::index.adoc
 
 content:
   sources:
