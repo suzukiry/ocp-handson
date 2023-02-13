@@ -1,8 +1,6 @@
 :labname: GitOps
 
-include::../include/00_0_Lab_Header.adoc[]
-
-== {labname} Lab
+ {labname} Lab
 
 :numbered:
 
@@ -73,7 +71,8 @@ ArgoCD の Application Sets::
 
 . Kustomizeをインストールします。
 +
-[source,sh]
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
 ----
 curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
 
@@ -82,7 +81,8 @@ sudo install ./kustomize /usr/bin
 
 . バージョンを確認します。
 +
-[source,sh]
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
 ----
 kustomize version
 ----
@@ -91,7 +91,8 @@ kustomize version
 
 . レポジトリをクローンします。
 +
-[source,sh]
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
 ----
 git clone https://github.com/RH-OPEN/test-example.git
 
@@ -100,7 +101,8 @@ cd test-example/coffee-shop-kustomize/coffee-shop
 
 . ディレクトリ構成を確認します。
 +
-[source,sh]
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
 ----
 tree
 .
@@ -123,7 +125,8 @@ NOTE: base と overlays 配下のkustomization.yamlによって管理されて�
 
 . base/kustomization.yaml の内容から、変更箇所を確認します。
 +
-[source,sh]
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
 ----
 cat base/kustomization.yaml
 ---
@@ -144,7 +147,8 @@ NOTE: ベースとされるリソースの設定、label追加がされること
 
 . overlays/production/kustomization.yaml の内容から、変更箇所を確認します。
 +
-[source,sh]
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
 ----
 cat overlays/production/kustomization.yaml
 ---
@@ -176,7 +180,8 @@ NOTE: metadata.name、namespaceが変更・追加され、*-patches.yamlによ�
 
 kustomize コマンド を実行して、適用後のマニフェストを確認しましょう。
 
-[source,yaml]
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
 ----
 diff -su <(kustomize build base) <(kustomize build overlays/production)
 ----
@@ -229,7 +234,8 @@ ArgoCD インターフェースには "No applications yet" と表示されて�
 . [gray-background white]#NEW APP# と [gray-background white]#EDIT AS YAML# を順にクリックします
 . 次のマニフェストをコピーして貼り付けます::
 +
-[source,yaml]
+[.console-input]
+[source,yaml,subs="attributes+,+macros"]
 ----
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -292,7 +298,8 @@ NOTE: Application Set のユーザーインターフェイスはまだないた�
 ArgoCD の web コンソールは閉じないでください！
 . OpenShiftコンソールの右上にあるプラス記号 *[big white black-background]#&CirclePlus;#* をクリックして、アプリケーションの ArgoCD アプリケーションセットの次の YAML マニフェストをインポートします。
 +
-[source,yaml]
+[.console-input]
+[source,yaml,subs="attributes+,+macros"]
 ----
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
