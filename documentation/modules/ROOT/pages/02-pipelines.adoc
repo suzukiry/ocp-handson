@@ -456,12 +456,12 @@ metadata:
 spec:
   params:
   - name: IMAGE
-    #<1>
+    #<a>
     value: image-registry.openshift-image-registry.svc:5000/pipelines-vote/vote-ui
   - name: deployment-name
     value: pipelines-vote-ui
   - name: git-url
-    #<2>
+    #<b>
     value: https://github.com/openshift/pipelines-vote-ui.git
   pipelineRef:
     name: build-and-deploy
@@ -475,8 +475,8 @@ spec:
 +
 *備考：*
 
-* `<1>` ビルドが書き込まれるイメージ名と、*Pod* がデプロイされるイメージ名が異なることに注意してください。
-* `<2>` アプリケーションのフロントエンド用に異なるリポジトリを使用しています。この場合、monorepoはどのように使用されたのでしょうか？
+* `<a>` ビルドが書き込まれるイメージ名と、*Pod* がデプロイされるイメージ名が異なることに注意してください。
+* `<b>` アプリケーションのフロントエンド用に異なるリポジトリを使用しています。この場合、monorepoはどのように使用されたのでしょうか？
 
 [blue-background white]#Create# をクリックし、パイプラインの実行を見てみましょう！
 
