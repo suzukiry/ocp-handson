@@ -36,26 +36,10 @@ NOTE: ArgoCD はまだ OpenShift と認証システムが統合されていま�
 .. *場所* 欄にいくつかリンクが表示されていますが、3番目に表示されている  [青い]#openshift-gitops-server# に対する場所のリンクをクリックします
 . ArgoCD の web ui に Username `admin` と先程クリップボードにコピーしたパスワードでログインします
 
-=== ArgoCD のProjects、Applications、Application Set について
+=== Project 作成
 
-ArgoCD の *Projects* は OpenShift のプロジェクトとは異なります。
+prod-coffeeshop
 
-Argocd の project::
-* Sources: git や Helm レポジトリ―の様なアプリケーション構成の YAML マニフェスト
-* Destinations: ソースがデプロイされる OpenShift サーバー、ネームスペース、およびそれらのユーザー
-* SyncPolicy: ArgoCD がソースとデプロイ先の同期を維持する方法に関して定義します
-* Tool: Kustomize やスクリプトなど
-アプリケーション構成設定（YAMLやHelmなど）を特定のデプロイ先の詳細に変換するツール。 例えば: ホストネーム、ポート、シークレット、コンテナイメージレジストリーなど
-
-Argocd の Application::
-* Namespace
-* Deployment
-* Service
-* Route
-
-ArgoCD の Application Sets::
-* ArgoCD内のマルチクラスターサポートとクラスターマルチテナントサポート
-* アプリケーションは、Git または Argo CD 独自に定義されたクラスターリストなど、複数の異なるソースからテンプレート化される場合があります。
 
 
 == Kustomize の動作確認
