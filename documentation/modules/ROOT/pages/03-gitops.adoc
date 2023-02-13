@@ -1,0 +1,425 @@
+:labname: GitOps
+
+include::../include/00_0_Lab_Header.adoc[]
+
+== {labname} Lab
+
+:numbered:
+
+== はじめに
+
+このラボでは、GitOpsオペレーターをデプロイし、それを使用してCoffeeShopアプリケーションを `prod-coffeeshop` プロジェクトにデプロイします。 Coffee-Shopアプリケーションは、YAMLマニフェストおよびkustomizeファイルとしてgitリポジトリに保存されます。 kustomizeがどのように機能するかの詳細については、そのgitリポジトリを調べる必要があります。
+
+
+まず、ArgoCDをデプロイして、ウェブインターフェースにアクセスします。次に、コーヒーショップアプリケーションのフロントエンドのArgoCDアプリケーション定義をコピーしてインターフェースに貼り付け、展開を確認します。先に進み、デプロイ後にそのアプリケーションを削除します。
+
+次に、複雑なアプリケーションのセットを複数のクラスターにデプロイできるApplicationSetについて説明しますが、ここではローカルクラスターにのみデプロイします。 ApplicationSetsを使用して、cofee-shop のフロントエンドコンポーネントだけでなく、Barista サーバレスアプリケーションを含む全てのアプリケーションを 1つのオブジェクトとしてデプロイします。
+
+最後に、OpenShift クラスター上のアプリケーションに手動で変更を加え、ArgoCD がアプリケーションを gitops リポジトリに記載されている通りにリカバリする様子を観察します。
+
+では始めましょう！
+
+== GitOps Operator のインストールと確認
+
+メールに記載されているユーザー名とパスワードを使用して、OpenShiftクラスターのWebコンソールにログインします。
+
+. Aministrator パースペクティブから、*Operator* -> *Operator Hub* を選択します。
+. *Filter by keyword...* ボックスに `openshift gitops` と入力し、*Red Hat OpenShift GitOps* タイルをクリックします。
+. *Install* さらにもう一度 *Install* をクリックします。その際、オプションは全てデフォルト設定のままとします。
+
+== Web UI を使った ArgoCD へのアクセス
+
+NOTE: ArgoCD はまだ OpenShift と認証システムが統合されていません
+
+. ArgoCD の admin パスワードを取得します:
+.. OpenShift Web コンソールの一番上のドロップダウンメニューから *Project: `openshift-gitops`* を選択します
+.. 左のナビゲーションバーで *ワークロード* -> *シークレット* をクリックします
+.. *名前で検索..* 欄に `openshift-gitops-cluster` と入力し [青い]#openshift-gitops-cluster# リンクをクリックします
+.. 表示された画面を下にスクロールし、*データ* の *admin.password* 欄の右にある *⎘* をクリックし、クリップボードにパスワードをコピーします
+. 次に ArgoCD web UI へのリンクを確認します
+.. 左のナビゲーションバーで *Networking* -> *Route* をクリックします
+.. *場所* 欄にいくつかリンクが表示されていますが、3番目に表示されている  [青い]#openshift-gitops-server# に対する場所のリンクをクリックします
+. ArgoCD の web ui に Username `admin` と先程クリップボードにコピーしたパスワードでログインします
+
+=== ArgoCD のProjects、Applications、Application Set について
+
+ArgoCD の *Projects* は OpenShift のプロジェクトとは異なります。
+
+Argocd の project::
+* Sources: git や Helm レポジトリ―の様なアプリケーション構成の YAML マニフェスト
+* Destinations: ソースがデプロイされる OpenShift サーバー、ネームスペース、およびそれらのユーザー
+* SyncPolicy: ArgoCD がソースとデプロイ先の同期を維持する方法に関して定義します
+* Tool: Kustomize やスクリプトなど
+アプリケーション構成設定（YAMLやHelmなど）を特定のデプロイ先の詳細に変換するツール。 例えば: ホストネーム、ポート、シークレット、コンテナイメージレジストリーなど
+
+Argocd の Application::
+* Namespace
+* Deployment
+* Service
+* Route
+
+ArgoCD の Application Sets::
+* ArgoCD内のマルチクラスターサポートとクラスターマルチテナントサポート
+* アプリケーションは、Git または Argo CD 独自に定義されたクラスターリストなど、複数の異なるソースからテンプレート化される場合があります。
+
+
+== Kustomize の動作確認
+今回の Argo CD によって導入する Application では、Kustomize を利用しています。Kustomize でどのようにマニフェストが管理・変更されているのか確認しましょう。
+
+=== 踏み台サーバにログインをします
+=== Kustomize のインストール
+
+* Kustomize を踏み台サーバにインストールします。
+
+. Kustomizeをインストールします。
++
+[source,sh]
+----
+curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+
+sudo install ./kustomize /usr/bin
+----
+
+. バージョンを確認します。
++
+[source,sh]
+----
+kustomize version
+----
+
+=== Kustomization.yaml の確認
+
+. レポジトリをクローンします。
++
+[source,sh]
+----
+git clone https://github.com/RH-OPEN/test-example.git
+
+cd test-example/coffee-shop-kustomize/coffee-shop
+----
+
+. ディレクトリ構成を確認します。
++
+[source,sh]
+----
+tree
+.
+|-- base
+|   |-- deployment.yaml
+|   |-- kustomization.yaml
+|   |-- route.yaml
+|   |-- secret.yaml
+|   `-- service.yaml
+`-- overlays
+    `-- production
+        |-- configmap.env
+        |-- deployment-patches.yaml
+        |-- kustomization.yaml
+        |-- route-patches.yaml
+        `-- service-patches.yaml
+----
++
+NOTE: base と overlays 配下のkustomization.yamlによって管理されていることがわかります。
+
+. base/kustomization.yaml の内容から、変更箇所を確認します。
++
+[source,sh]
+----
+cat base/kustomization.yaml
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ./secret.yaml
+- ./deployment.yaml
+- ./service.yaml
+- ./route.yaml
+
+commonLabels:
+  app: prod-coffee-shop
+----
++
+NOTE: ベースとされるリソースの設定、label追加がされることが読み取れます
+
+. overlays/production/kustomization.yaml の内容から、変更箇所を確認します。
++
+[source,sh]
+----
+cat overlays/production/kustomization.yaml
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namePrefix: prod-
+
+bases:
+- ../../base
+
+namespace: prod-coffeeshop
+
+patches:
+- ./deployment-patches.yaml
+- ./route-patches.yaml
+- ./service-patches.yaml
+
+configMapGenerator:
+- name: coffee-shop
+  envs:
+  - ./configmap.env
+----
++ 
+NOTE: metadata.name、namespaceが変更・追加され、*-patches.yamlによってパッチ適用、configmapのアサインメントがされていることが理解できます。
+
+
+=== Kustomization.yaml の確認
+
+kustomize コマンド を実行して、適用後のマニフェストを確認しましょう。
+
+[source,yaml]
+----
+diff -su <(kustomize build base) <(kustomize build overlays/production)
+----
+
+NOTE: kustomization.yamlを確認した通りの差分があるか確認しましょう。
+
+== Coffee-Shop "App Project" の準備
+
+* コーヒーショップアプリケーション専用の新しい "App Project" を作成します。  
+* ArgoCDのユーザーインターフェイスは少し扱いにくい場合があるため、注意深く指示に従って操作してください  
+* あるステップでミスした場合、問題ない様に思えるデフォルト設定のいくつかが実際には正常に適応されていない可能性があります  
+* これは実際にはセキュリティ機能です。 "すべてを許可" していることを確認してください。  
+
+. 左側のナビゲーションパネルにある歯車のアイコンを使用して、ArgoCD Webコンソールから AppProject 管理インターフェイスにアクセスします。
++
+image::images/argocd_manage_projects.png[width=50%]
++
+. *Projects* をクリックし、次に *New Project* を選択。`coffee-shop` と言う名前の新しいプロジェクトを作成します
+. `coffee-shop` と入力し、*Create* をクリックします
+. *SOURCE REPOSITORIES* までスクロールダウンし、*EDIT* →　*ADD SOURCE* をクリックし *SAVE* をクリックします
+ソースリポジトリとして、アスタリスク `*` が入力されていますが、このプロジェクトを使用するアプリケーションが任意のリポジトリが使用可能であることを示しています
+このプロジェクトのアプリケーションが任意のリポジトリから任意の場所から構成をプルできるようになったという事実を認識するために、この作業を行っています
+. *Destinations* までスクロールダウンし、 *Edit* をクリックします
+. *Add Destination* をクリックし *Namespace* の下にある `*` を `prod-coffeeshop` と書き換えます
++
+NOTE: OpenShift GitOps Operator が稼働するローカルサーバーとなるため、サーバー名を入力する必要はありません。
++
+
+NOTE: `prod-coffeeshop` ネームスペースがきちんと指定されていことに注意してください。
+もし指定しなかった場合、 `prod-coffeeshop` だけではなく、OpenShift 上の *全ての* アプリケーションが ArgoCD から管理されることになります。
+
+. *Save* をクリック
+. 左のナビゲーションバーから *Manage Applications* アイコンをクリック
++
+image::images/argocd_manage_applications.png[width=50%]
+
+これで、新しい ArgoCD の *applications* を OpenShift のアプリケーション管理に紐づけるための project を作成する事が出来ました。
+
+== Coffee Shop Application を Production ネームスペースにデプロイする
+
+Coffee Shopには、データベース、Coffee Shopのフロントエンドと注文管理システム、および準備から収集までのすべての注文の状態を管理する Barista サービスの3つのコンポーネントがあります。
+
+データベースはすでにデプロイされています。
+
+最初にCoffeeShopアプリケーションのフロントエンドコンポーネントのみをデプロイして、ArgoCDの "application" とは何かを理解しましょう。
+
+ArgoCD インターフェースには "No applications yet" と表示されていると思います。
+ここでは、ArgoCD インターフェースに貼り付けるための ArgoCD アプリケーションの YAML を提供しています。
+
+. [gray-background white]#NEW APP# と [gray-background white]#EDIT AS YAML# を順にクリックします
+. 次のマニフェストをコピーして貼り付けます::
++
+[source,yaml]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prod-coffee-shop
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: prod-coffeeshop
+  project: coffee-shop
+  source:
+    path: ./coffee-shop-kustomize/coffee-shop/overlays/production
+    repoURL: https://github.com/RH-OPEN/test-example.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated: # automated sync by default retries failed attempts 5 times with following delays between attempts ( 5s, 10s, 20s, 40s, 80s ); retry controlled using `retry` field.
+      prune: true # Specifies if resources should be pruned during auto-syncing ( false by default ).
+      selfHeal: true # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).
+      allowEmpty: false # Allows deleting all application resources during automatic syncing ( false by default ).
+    syncOptions:     # Sync options which modifies sync behavior
+    - Validate=false # disables resource validation (equivalent to 'kubectl apply --validate=false') ( true by default ).
+    - CreateNamespace=true # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.
+    - PrunePropagationPolicy=foreground # Supported policies are background, foreground and orphan.
+    - PruneLast=true # Allow the ability for resource pruning to happen as a final, implicit wave of a sync operation
+    # The retry feature is available since v1.7
+    retry:
+      limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+      backoff:
+        duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+        factor: 2 # a factor to multiply the base duration after each failed retry
+        maxDuration: 3m # the maximum amount of time allowed for the backoff strategy
+----
++
+NOTE: アプリの定義に何か問題がある場合は、here: https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-argocd/coffee-shop.yaml からコピーしてください 
++
+. [gray-background white]#SAVE# をクリックします
+. アプリケーションを定義するフィールドがどのように入力されているかを観察します
+. [gray-background white]#CREATE# をクリックし、次に [gray-background white]#SYNC# をクリックし、さらに [gray-background white]#SYNCHRONIZE# をクリックします（今回のApplicationは自動同期の設定がされているため、自動でSYNCされます。）
+. アプリケーション名をクリックし、アプリケーションのすべての部分の表現を確認して、アプリケーションがどのように展開されるかを確認します。
++
+image::images/argo-coffee-shop-deploy.png[]
+
+アプリケーションコンポーネントが正常にデプロイされたら、アプリケーションを削除します。次の演習で、ApplicationSet という単一のオブジェクトを使って複数のコンポーネントをデプロイするためです。
+*coffee-shop* アプリケーションの  *DELETE* をクリックして `coffee-shop` アプリケーションを削除します。
+
+NOTE: `coffee-shop` アプリケーションの削除をお忘れなく！
+
+== ArgoCD Application Set を使って Barista コンポーネントを Knative サービスとしてデプロイする
+
+ここでは、OpenShift GitOps ArgoCD の新機能である Application Sets を使用します。
+
+Application Set を利用すると、複数のクラスターセットに複数のアプリケーションを簡単にデプロイできます。
+
+既存のコーヒーショップアプリケーションコンポーネントである coffee-shop と barista を、すべて同じサーバーと同じ namespace に簡単にデプロイします。
+
+NOTE: Application Set のユーザーインターフェイスはまだないため、この作業を行うには OpenShift Web コンソールに戻る必要があります。
+
+. OpenShift web コンソールに戻ります
+ArgoCD の web コンソールは閉じないでください！
+. OpenShiftコンソールの右上にあるプラス記号 *[big white black-background]#&CirclePlus;#* をクリックして、アプリケーションの ArgoCD アプリケーションセットの次の YAML マニフェストをインポートします。
++
+[source,yaml]
+----
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: coffee-shop-set
+  namespace: openshift-gitops
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/RH-OPEN/test-example.git
+      revision: HEAD
+      directories:
+      - path: coffee-shop-kustomize/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: coffee-shop
+      source:
+        repoURL: https://github.com/RH-OPEN/test-example.git
+        targetRevision: HEAD
+        path: '{{path}}/overlays/production/'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: prod-coffeeshop
+      syncPolicy:
+        automated: # automated sync by default retries failed attempts 5 times with following delays between attempts ( 5s, 10s, 20s, 40s, 80s ); retry controlled using `retry` field.
+          prune: true # Specifies if resources should be pruned during auto-syncing ( false by default ).
+          selfHeal: true # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).
+          allowEmpty: false # Allows deleting all application resources during automatic syncing ( false by default ).
+        syncOptions:     # Sync options which modifies sync behavior
+        - Validate=false # disables resource validation (equivalent to 'kubectl apply --validate=false') ( true by default ).
+        - CreateNamespace=true # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.
+        - PrunePropagationPolicy=foreground # Supported policies are background, foreground and orphan.
+        - PruneLast=true # Allow the ability for resource pruning to happen as a final, implicit wave of a sync operation
+        # The retry feature is available since v1.7
+        retry:
+          limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+          backoff:
+            duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+            factor: 2 # a factor to multiply the base duration after each failed retry
+            maxDuration: 3m # the maximum amount of time allowed for the backoff strategy
+----
++
+NOTE: もしアプリケーションの動作に何かしら問題が出る場合は、こちらからコピーペーストしてください。: https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-argocd/coffee-shop-application-set.yaml
++
+. [blue-background white]#Create# をクリックすると、application set が作成されます。
+
+=== アプリケーションの同期
+
+. ArgoCD web コンソールに戻り *cofee-shop* と *barista* アプリケーションが追加されていることを確認します
+. *barista* アプリケーションの [gray-background]#SYNC# をクリックします
+. 次に表示される *barista* アプリケーションの [gray-background]#SYNCHRONIZE# をクリックします
+. 同様に、*coffee-shop* アプリケーションの [gray-background]#SYNC# をクリックします
+. さらに、表示される *coffee-shop* アプリケーションの [gray-background]#SYNCHRONIZE# をクリックします
+. *coffee-shop* アプリケーションが同期されます
+
+これらのアプリケーションの詳細を確認するには、それぞれのアプリケーションタイルをクリックしてください
+
+== アプリケーション設定を変更し、ArgoCD で正しく設定されることを確認する
+
+ArgoCD はソースとデプロイ先の変更を監視します
+同期されると、ArgoCD は、ArgoCD アプリケーションの構成に応じて、自動的に、または承認を得て、宛先をソースで定義された状態に戻します。
+ArgoCD のデフォルト設定は非常に保守的であり、同期自動化ポリシーはオンになっていません。
+この例では、これらのポリシーをオンにしています。
+この例では、本番の coffee-shop アプリケーションを手動でスケールアップし、ArgoCD がそれを1つのレプリカにスケールダウンするのを確認します。
+
+. OpenShift web コンソールに戻ります
+. *Administration* パースペクティブでドロップダウンから *プロジェクト: `prod-coffeeshop`* を選択します
+. 左のナビゲーションバーで *ワークロード* -> *デプロイメント* を選択します
+. [blue]#prod-coffee-shop# デプロイメントの一番右にある、ケバブ（縦3つの点）メニューをクリックし *Pod 数の編集* をクリックします
+. Plus *[big black]#&CirclePlus;#* を4回クリックして、5 pods 設定として保存します。
+. ArgoCD の web コンソールに戻ります
+. *Applications* さらに *coffee-shop* アプリケーションタイルをクリックします。
+. ArgoCD Web コンソール上で pod が一時的にスケールアップされ、再度自動的にスケールダウンされ、ソースコードリポジトリに記載された 1 レプリカに戻る様子を確認します。
++
+[NOTE]
+====
+1 レプリカ構成になっていることはこちらから確認が出来ます:  link:https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-kustomize/coffee-shop/base/deployment.yaml#L14[]
+====
++
+実際にデプロイされている OpenShift のリソースを確認するために、[gray-background white]#REFRESH# ボタンをクリックします。 
+
+= （オプションラボ）新しいログデータの確認
+
+いくつかの新しいアプリケーションコンポーネントを `prod-coffeeshop` 名前空間にデプロイしました。
+ログがどのように変化したかを見てみましょう。
+
+== `prod-coffeeshop` ネームスペースを `ClusterLogForwarder` に追加しましょう。
+
+. OpenShift web コンソールで *管理者* パースペクティブを選択
+. 左のパネルで *ホーム* -> *検索* をクリック
+. 上部の *プロジェクト:* ドロップダウンで `openshift-logging` ネームスペースを選択
+. *リソース* ドロップダウンで `ClusterLogForwarder` にチェックを入れます
+. [blue-background white]#CLF# [blue]#instance# という1つのインスタンスが表示されると思いますので、instace の青いリンクをクリックします
+. *YAML* タブをクリック
+. 表示される黒いエディター画面の 53行 あたりにある `- dev-coffeeshop` を見つけます
+. `- dev-coffeeshop` の直後に `- prod-coffeeshop` を追加します
+. 以下の様になります:
++
+image:images/logging_prod_coffeeshop_yaml.png[width=50%]
++
+. 保存をクリックし完了です！
+
+== 新しいログを調べる
+
+. Kibana コンソールに移動します。(左のメニューバーから "ネットワーク" → "ルート" で、"場所" へのリンクをクリック)
+. *全て* のコーヒーショッププロジェクト、つまり `dev-coffeeshop` と `prod-coffeeshop` 両方を対象とするために、新しいインデックスパターンを作成します
+. 左のナビゲーションバーで、*Management* をクリックします
+. *Index pattern* 次に、*Create index pattern* をクリックし `\*-coffeeshop-*` を追加し、 *Next step* をクリック、さらに *Time Filter* フィールドに `@timestamp` を選択。 *Cretate index pattern* をクリックします。
+. ナビゲーションバーから *Discover* をクリックします
+. 作成した \*-coffeeshop-* インデックスパターンと、 *Available Fields* に `kubernetes.namespace_name` and `structured.message` を選択します
+. `dev-coffeeshop` ネームスペースと `prod-coffeeshop` ネームスペースの両方からの結果が表示されます
+. また、クラスターで実行されている `Create Order` クーロンジョブによって処理されているいくつかの新しいオーダーが表示されます
+
+= サマリー
+
+- ArgoCD を使って Production 用の個別 coffeeshop アプリケーションをデプロイしました。
+- 次に、ArgoCD の ApplicationSet を使って二つのアプリケーション、coffee-shop と barista を自動的にデプロイしました。 
+- Barista は Knative サービスでした。ArgoCD を使用して Kubernetes Deployments または KnativeServices をデプロイするために特別なアクティビティは必要ありませんでした
+- また、ログに `prod-coffeeshop` namespace からの結果がどのように表示されるかを確認しました。さらに詳細な分析を行うために、`structured.*` フィールドにクエリを実行できます
+
+////
+コースを終了するために、dev-coffeeshop プロジェクトの簡単なパイプラインの実行に移りましょう。 
+////
+
+////
+ArgoCD アプリケーションサンプル
+https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/application.yaml
+////
