@@ -1,11 +1,10 @@
-include::_attributes.adoc[]
-
 
 :labname: Pipelines
 
 {labname} Lab
 
 = はじめに
+include::_attributes.adoc[]
 
 Red Hat OpenShift Pipelinesは、Kubernetesリソースに基づくクラウドネイティブの継続的インテグレーションおよび継続的デリバリー（CI / CD）ソリューションです。
 
