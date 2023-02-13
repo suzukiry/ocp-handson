@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Untitled :: Template Tutorial</title>
+    <link rel="canonical" href="https://redhat-scholars.github.io/course-template/ocp-handson/03-gitops.html">
+    <link rel="prev" href="02-pipelines.html">
+    <meta name="generator" content="Antora 3.0.0">
+    <link rel="stylesheet" href="../_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://developers.redhat.com" target="_blank"><img src="../_/img/NewRHDFullLogo_4-color_white-wordmark.png" height="40px" alt="Red Hat Developer Program"></a>
+      <a class="navbar-item" style="font-size: 24px; color: white" href="https://redhat-scholars.github.io/course-template">Template Tutorial</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="https://developers.redhat.com/ebooks/" target="_blank">Books</a>
+        <a class="navbar-item" href="https://developers.redhat.com/cheatsheets/" target="_blank">Cheat Sheets</a>
+        <a class="navbar-item" href="https://developers.redhat.com/events/" target="_blank">Upcoming Events</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">More Tutorials</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/kubernetes-tutorial/" target="_blank">Kubernetes</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/istio-tutorial/" target="_blank">Istio</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/quarkus-tutorial/" target="_blank">Quarkus</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/knative-tutorial/" target="_blank">Knative</a>
+            <a class="navbar-item" href="https://redhat-developer-demos.github.io/tekton-tutorial/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ocp-handson" data-version="master">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html"></a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="01-setup.html">1. Setup</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="02-pipelines.html">2. OpenShift Pipelines</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-pipelines.html#prerequisite">準備</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-pipelines.html#sample">サンプル</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-pipelines.html#createtask">Task作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-pipelines.html#createpvc">PVC作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-pipelines.html#createpipeline">Pipeline作成</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="02-pipelines.html#runpipeline">Pipeline実行</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="03-gitops.html">3. OpenShift GitOps</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">OpenShift Handson</a></li>
+    <li><a href="03-gitops.html">3. OpenShift GitOps</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/suzukiry/ocp-handson/edit/master/documentation/modules/ROOT/pages/03-gitops.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<article class="doc">
+<div class="literalblock">
+<div class="content">
+<pre>{labname} Lab</pre>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_はじめに"><a class="anchor" href="#_はじめに"></a>1. はじめに</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>このラボでは、GitOpsオペレーターをデプロイし、それを使用してCoffeeShopアプリケーションを <code>prod-coffeeshop</code> プロジェクトにデプロイします。 Coffee-Shopアプリケーションは、YAMLマニフェストおよびkustomizeファイルとしてgitリポジトリに保存されます。 kustomizeがどのように機能するかの詳細については、そのgitリポジトリを調べる必要があります。</p>
+</div>
+<div class="paragraph">
+<p>まず、ArgoCDをデプロイして、ウェブインターフェースにアクセスします。次に、コーヒーショップアプリケーションのフロントエンドのArgoCDアプリケーション定義をコピーしてインターフェースに貼り付け、展開を確認します。先に進み、デプロイ後にそのアプリケーションを削除します。</p>
+</div>
+<div class="paragraph">
+<p>次に、複雑なアプリケーションのセットを複数のクラスターにデプロイできるApplicationSetについて説明しますが、ここではローカルクラスターにのみデプロイします。 ApplicationSetsを使用して、cofee-shop のフロントエンドコンポーネントだけでなく、Barista サーバレスアプリケーションを含む全てのアプリケーションを 1つのオブジェクトとしてデプロイします。</p>
+</div>
+<div class="paragraph">
+<p>最後に、OpenShift クラスター上のアプリケーションに手動で変更を加え、ArgoCD がアプリケーションを gitops リポジトリに記載されている通りにリカバリする様子を観察します。</p>
+</div>
+<div class="paragraph">
+<p>では始めましょう！</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_gitops_operator_のインストールと確認"><a class="anchor" href="#_gitops_operator_のインストールと確認"></a>2. GitOps Operator のインストールと確認</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>メールに記載されているユーザー名とパスワードを使用して、OpenShiftクラスターのWebコンソールにログインします。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Aministrator パースペクティブから、<strong>Operator</strong> &#8594; <strong>Operator Hub</strong> を選択します。</p>
+</li>
+<li>
+<p><strong>Filter by keyword&#8230;&#8203;</strong> ボックスに <code>openshift gitops</code> と入力し、<strong>Red Hat OpenShift GitOps</strong> タイルをクリックします。</p>
+</li>
+<li>
+<p><strong>Install</strong> さらにもう一度 <strong>Install</strong> をクリックします。その際、オプションは全てデフォルト設定のままとします。</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_web_ui_を使った_argocd_へのアクセス"><a class="anchor" href="#_web_ui_を使った_argocd_へのアクセス"></a>3. Web UI を使った ArgoCD へのアクセス</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+ArgoCD はまだ OpenShift と認証システムが統合されていません
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ArgoCD の admin パスワードを取得します:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>OpenShift Web コンソールの一番上のドロップダウンメニューから <strong>Project: <code>openshift-gitops</code></strong> を選択します</p>
+</li>
+<li>
+<p>左のナビゲーションバーで <strong>ワークロード</strong> &#8594; <strong>シークレット</strong> をクリックします</p>
+</li>
+<li>
+<p><strong>名前で検索..</strong> 欄に <code>openshift-gitops-cluster</code> と入力し <span class="青い">openshift-gitops-cluster</span> リンクをクリックします</p>
+</li>
+<li>
+<p>表示された画面を下にスクロールし、<strong>データ</strong> の <strong>admin.password</strong> 欄の右にある <strong>⎘</strong> をクリックし、クリップボードにパスワードをコピーします</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>次に ArgoCD web UI へのリンクを確認します</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>左のナビゲーションバーで <strong>Networking</strong> &#8594; <strong>Route</strong> をクリックします</p>
+</li>
+<li>
+<p><strong>場所</strong> 欄にいくつかリンクが表示されていますが、3番目に表示されている  <span class="青い">openshift-gitops-server</span> に対する場所のリンクをクリックします</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>ArgoCD の web ui に Username <code>admin</code> と先程クリップボードにコピーしたパスワードでログインします</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_argocd_のprojectsapplicationsapplication_set_について"><a class="anchor" href="#_argocd_のprojectsapplicationsapplication_set_について"></a>3.1. ArgoCD のProjects、Applications、Application Set について</h3>
+<div class="paragraph">
+<p>ArgoCD の <strong>Projects</strong> は OpenShift のプロジェクトとは異なります。</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Argocd の project</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Sources: git や Helm レポジトリ―の様なアプリケーション構成の YAML マニフェスト</p>
+</li>
+<li>
+<p>Destinations: ソースがデプロイされる OpenShift サーバー、ネームスペース、およびそれらのユーザー</p>
+</li>
+<li>
+<p>SyncPolicy: ArgoCD がソースとデプロイ先の同期を維持する方法に関して定義します</p>
+</li>
+<li>
+<p>Tool: Kustomize やスクリプトなど
+アプリケーション構成設定（YAMLやHelmなど）を特定のデプロイ先の詳細に変換するツール。 例えば: ホストネーム、ポート、シークレット、コンテナイメージレジストリーなど</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Argocd の Application</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Namespace</p>
+</li>
+<li>
+<p>Deployment</p>
+</li>
+<li>
+<p>Service</p>
+</li>
+<li>
+<p>Route</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">ArgoCD の Application Sets</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>ArgoCD内のマルチクラスターサポートとクラスターマルチテナントサポート</p>
+</li>
+<li>
+<p>アプリケーションは、Git または Argo CD 独自に定義されたクラスターリストなど、複数の異なるソースからテンプレート化される場合があります。</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_kustomize_の動作確認"><a class="anchor" href="#_kustomize_の動作確認"></a>4. Kustomize の動作確認</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>今回の Argo CD によって導入する Application では、Kustomize を利用しています。Kustomize でどのようにマニフェストが管理・変更されているのか確認しましょう。</p>
+</div>
+<div class="sect2">
+<h3 id="_踏み台サーバにログインをします"><a class="anchor" href="#_踏み台サーバにログインをします"></a>4.1. 踏み台サーバにログインをします</h3>
+
+</div>
+<div class="sect2">
+<h3 id="_kustomize_のインストール"><a class="anchor" href="#_kustomize_のインストール"></a>4.2. Kustomize のインストール</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Kustomize を踏み台サーバにインストールします。</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Kustomizeをインストールします。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+
+sudo install ./kustomize /usr/bin</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>バージョンを確認します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">kustomize version</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_kustomization_yaml_の確認"><a class="anchor" href="#_kustomization_yaml_の確認"></a>4.3. Kustomization.yaml の確認</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>レポジトリをクローンします。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/RH-OPEN/test-example.git" class="bare">https://github.com/RH-OPEN/test-example.git</a>
+
+cd test-example/coffee-shop-kustomize/coffee-shop</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>ディレクトリ構成を確認します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">tree
+.
+|-- base
+|   |-- deployment.yaml
+|   |-- kustomization.yaml
+|   |-- route.yaml
+|   |-- secret.yaml
+|   `-- service.yaml
+`-- overlays
+    `-- production
+        |-- configmap.env
+        |-- deployment-patches.yaml
+        |-- kustomization.yaml
+        |-- route-patches.yaml
+        `-- service-patches.yaml</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+base と overlays 配下のkustomization.yamlによって管理されていることがわかります。
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>base/kustomization.yaml の内容から、変更箇所を確認します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat base/kustomization.yaml
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ./secret.yaml
+- ./deployment.yaml
+- ./service.yaml
+- ./route.yaml
+
+commonLabels:
+  app: prod-coffee-shop</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+ベースとされるリソースの設定、label追加がされることが読み取れます
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>overlays/production/kustomization.yaml の内容から、変更箇所を確認します。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cat overlays/production/kustomization.yaml
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namePrefix: prod-
+
+bases:
+- ../../base
+
+namespace: prod-coffeeshop
+
+patches:
+- ./deployment-patches.yaml
+- ./route-patches.yaml
+- ./service-patches.yaml
+
+configMapGenerator:
+- name: coffee-shop
+  envs:
+  - ./configmap.env</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+metadata.name、namespaceが変更・追加され、*-patches.yamlによってパッチ適用、configmapのアサインメントがされていることが理解できます。
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_kustomization_yaml_の確認_2"><a class="anchor" href="#_kustomization_yaml_の確認_2"></a>4.4. Kustomization.yaml の確認</h3>
+<div class="paragraph">
+<p>kustomize コマンド を実行して、適用後のマニフェストを確認しましょう。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">diff -su &lt;(kustomize build base) &lt;(kustomize build overlays/production)</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+kustomization.yamlを確認した通りの差分があるか確認しましょう。
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_coffee_shop_app_project_の準備"><a class="anchor" href="#_coffee_shop_app_project_の準備"></a>5. Coffee-Shop "App Project" の準備</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>コーヒーショップアプリケーション専用の新しい "App Project" を作成します。</p>
+</li>
+<li>
+<p>ArgoCDのユーザーインターフェイスは少し扱いにくい場合があるため、注意深く指示に従って操作してください</p>
+</li>
+<li>
+<p>あるステップでミスした場合、問題ない様に思えるデフォルト設定のいくつかが実際には正常に適応されていない可能性があります</p>
+</li>
+<li>
+<p>これは実際にはセキュリティ機能です。 "すべてを許可" していることを確認してください。</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>左側のナビゲーションパネルにある歯車のアイコンを使用して、ArgoCD Webコンソールから AppProject 管理インターフェイスにアクセスします。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/argocd_manage_projects.png" alt="argocd manage projects" width="50%">
+</div>
+</div>
+</li>
+<li>
+<p><strong>Projects</strong> をクリックし、次に <strong>New Project</strong> を選択。<code>coffee-shop</code> と言う名前の新しいプロジェクトを作成します</p>
+</li>
+<li>
+<p><code>coffee-shop</code> と入力し、<strong>Create</strong> をクリックします</p>
+</li>
+<li>
+<p><strong>SOURCE REPOSITORIES</strong> までスクロールダウンし、<strong>EDIT</strong> →　<strong>ADD SOURCE</strong> をクリックし <strong>SAVE</strong> をクリックします
+ソースリポジトリとして、アスタリスク <code>*</code> が入力されていますが、このプロジェクトを使用するアプリケーションが任意のリポジトリが使用可能であることを示しています
+このプロジェクトのアプリケーションが任意のリポジトリから任意の場所から構成をプルできるようになったという事実を認識するために、この作業を行っています</p>
+</li>
+<li>
+<p><strong>Destinations</strong> までスクロールダウンし、 <strong>Edit</strong> をクリックします</p>
+</li>
+<li>
+<p><strong>Add Destination</strong> をクリックし <strong>Namespace</strong> の下にある <code>*</code> を <code>prod-coffeeshop</code> と書き換えます</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+OpenShift GitOps Operator が稼働するローカルサーバーとなるため、サーバー名を入力する必要はありません。
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>prod-coffeeshop</code> ネームスペースがきちんと指定されていことに注意してください。
+もし指定しなかった場合、 <code>prod-coffeeshop</code> だけではなく、OpenShift 上の <strong>全ての</strong> アプリケーションが ArgoCD から管理されることになります。
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><strong>Save</strong> をクリック</p>
+</li>
+<li>
+<p>左のナビゲーションバーから <strong>Manage Applications</strong> アイコンをクリック</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/argocd_manage_applications.png" alt="argocd manage applications" width="50%">
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>これで、新しい ArgoCD の <strong>applications</strong> を OpenShift のアプリケーション管理に紐づけるための project を作成する事が出来ました。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_coffee_shop_application_を_production_ネームスペースにデプロイする"><a class="anchor" href="#_coffee_shop_application_を_production_ネームスペースにデプロイする"></a>6. Coffee Shop Application を Production ネームスペースにデプロイする</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Coffee Shopには、データベース、Coffee Shopのフロントエンドと注文管理システム、および準備から収集までのすべての注文の状態を管理する Barista サービスの3つのコンポーネントがあります。</p>
+</div>
+<div class="paragraph">
+<p>データベースはすでにデプロイされています。</p>
+</div>
+<div class="paragraph">
+<p>最初にCoffeeShopアプリケーションのフロントエンドコンポーネントのみをデプロイして、ArgoCDの "application" とは何かを理解しましょう。</p>
+</div>
+<div class="paragraph">
+<p>ArgoCD インターフェースには "No applications yet" と表示されていると思います。
+ここでは、ArgoCD インターフェースに貼り付けるための ArgoCD アプリケーションの YAML を提供しています。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><span class="gray-background white">NEW APP</span> と <span class="gray-background white">EDIT AS YAML</span> を順にクリックします</p>
+</li>
+<li>
+<p>次のマニフェストをコピーして貼り付けます::</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prod-coffee-shop
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
+    namespace: prod-coffeeshop
+  project: coffee-shop
+  source:
+    path: ./coffee-shop-kustomize/coffee-shop/overlays/production
+    repoURL: <a href="https://github.com/RH-OPEN/test-example.git" class="bare">https://github.com/RH-OPEN/test-example.git</a>
+    targetRevision: HEAD
+  syncPolicy:
+    automated: # automated sync by default retries failed attempts 5 times with following delays between attempts ( 5s, 10s, 20s, 40s, 80s ); retry controlled using `retry` field.
+      prune: true # Specifies if resources should be pruned during auto-syncing ( false by default ).
+      selfHeal: true # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).
+      allowEmpty: false # Allows deleting all application resources during automatic syncing ( false by default ).
+    syncOptions:     # Sync options which modifies sync behavior
+    - Validate=false # disables resource validation (equivalent to 'kubectl apply --validate=false') ( true by default ).
+    - CreateNamespace=true # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.
+    - PrunePropagationPolicy=foreground # Supported policies are background, foreground and orphan.
+    - PruneLast=true # Allow the ability for resource pruning to happen as a final, implicit wave of a sync operation
+    # The retry feature is available since v1.7
+    retry:
+      limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+      backoff:
+        duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+        factor: 2 # a factor to multiply the base duration after each failed retry
+        maxDuration: 3m # the maximum amount of time allowed for the backoff strategy</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+アプリの定義に何か問題がある場合は、here: <a href="https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-argocd/coffee-shop.yaml" class="bare">https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-argocd/coffee-shop.yaml</a> からコピーしてください
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><span class="gray-background white">SAVE</span> をクリックします</p>
+</li>
+<li>
+<p>アプリケーションを定義するフィールドがどのように入力されているかを観察します</p>
+</li>
+<li>
+<p><span class="gray-background white">CREATE</span> をクリックし、次に <span class="gray-background white">SYNC</span> をクリックし、さらに <span class="gray-background white">SYNCHRONIZE</span> をクリックします（今回のApplicationは自動同期の設定がされているため、自動でSYNCされます。）</p>
+</li>
+<li>
+<p>アプリケーション名をクリックし、アプリケーションのすべての部分の表現を確認して、アプリケーションがどのように展開されるかを確認します。</p>
+<div class="imageblock unresolved">
+<div class="content">
+<img src="images/argo-coffee-shop-deploy.png" alt="argo coffee shop deploy">
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>アプリケーションコンポーネントが正常にデプロイされたら、アプリケーションを削除します。次の演習で、ApplicationSet という単一のオブジェクトを使って複数のコンポーネントをデプロイするためです。
+<strong>coffee-shop</strong> アプリケーションの  <strong>DELETE</strong> をクリックして <code>coffee-shop</code> アプリケーションを削除します。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>coffee-shop</code> アプリケーションの削除をお忘れなく！
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_argocd_application_set_を使って_barista_コンポーネントを_knative_サービスとしてデプロイする"><a class="anchor" href="#_argocd_application_set_を使って_barista_コンポーネントを_knative_サービスとしてデプロイする"></a>7. ArgoCD Application Set を使って Barista コンポーネントを Knative サービスとしてデプロイする</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ここでは、OpenShift GitOps ArgoCD の新機能である Application Sets を使用します。</p>
+</div>
+<div class="paragraph">
+<p>Application Set を利用すると、複数のクラスターセットに複数のアプリケーションを簡単にデプロイできます。</p>
+</div>
+<div class="paragraph">
+<p>既存のコーヒーショップアプリケーションコンポーネントである coffee-shop と barista を、すべて同じサーバーと同じ namespace に簡単にデプロイします。</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Application Set のユーザーインターフェイスはまだないため、この作業を行うには OpenShift Web コンソールに戻る必要があります。
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>OpenShift web コンソールに戻ります
+ArgoCD の web コンソールは閉じないでください！</p>
+</li>
+<li>
+<p>OpenShiftコンソールの右上にあるプラス記号 <strong><span class="big white black-background">&CirclePlus;</span></strong> をクリックして、アプリケーションの ArgoCD アプリケーションセットの次の YAML マニフェストをインポートします。</p>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: coffee-shop-set
+  namespace: openshift-gitops
+spec:
+  generators:
+  - git:
+      repoURL: <a href="https://github.com/RH-OPEN/test-example.git" class="bare">https://github.com/RH-OPEN/test-example.git</a>
+      revision: HEAD
+      directories:
+      - path: coffee-shop-kustomize/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: coffee-shop
+      source:
+        repoURL: <a href="https://github.com/RH-OPEN/test-example.git" class="bare">https://github.com/RH-OPEN/test-example.git</a>
+        targetRevision: HEAD
+        path: '{{path}}/overlays/production/'
+      destination:
+        server: <a href="https://kubernetes.default.svc" class="bare">https://kubernetes.default.svc</a>
+        namespace: prod-coffeeshop
+      syncPolicy:
+        automated: # automated sync by default retries failed attempts 5 times with following delays between attempts ( 5s, 10s, 20s, 40s, 80s ); retry controlled using `retry` field.
+          prune: true # Specifies if resources should be pruned during auto-syncing ( false by default ).
+          selfHeal: true # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).
+          allowEmpty: false # Allows deleting all application resources during automatic syncing ( false by default ).
+        syncOptions:     # Sync options which modifies sync behavior
+        - Validate=false # disables resource validation (equivalent to 'kubectl apply --validate=false') ( true by default ).
+        - CreateNamespace=true # Namespace Auto-Creation ensures that namespace specified as the application destination exists in the destination cluster.
+        - PrunePropagationPolicy=foreground # Supported policies are background, foreground and orphan.
+        - PruneLast=true # Allow the ability for resource pruning to happen as a final, implicit wave of a sync operation
+        # The retry feature is available since v1.7
+        retry:
+          limit: 5 # number of failed sync attempt retries; unlimited number of attempts if less than 0
+          backoff:
+            duration: 5s # the amount to back off. Default unit is seconds, but could also be a duration (e.g. "2m", "1h")
+            factor: 2 # a factor to multiply the base duration after each failed retry
+            maxDuration: 3m # the maximum amount of time allowed for the backoff strategy</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+もしアプリケーションの動作に何かしら問題が出る場合は、こちらからコピーペーストしてください。: <a href="https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-argocd/coffee-shop-application-set.yaml" class="bare">https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-argocd/coffee-shop-application-set.yaml</a>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><span class="blue-background white">Create</span> をクリックすると、application set が作成されます。</p>
+</li>
+</ol>
+</div>
+<div class="sect2">
+<h3 id="_アプリケーションの同期"><a class="anchor" href="#_アプリケーションの同期"></a>7.1. アプリケーションの同期</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>ArgoCD web コンソールに戻り <strong>cofee-shop</strong> と <strong>barista</strong> アプリケーションが追加されていることを確認します</p>
+</li>
+<li>
+<p><strong>barista</strong> アプリケーションの <span class="gray-background">SYNC</span> をクリックします</p>
+</li>
+<li>
+<p>次に表示される <strong>barista</strong> アプリケーションの <span class="gray-background">SYNCHRONIZE</span> をクリックします</p>
+</li>
+<li>
+<p>同様に、<strong>coffee-shop</strong> アプリケーションの <span class="gray-background">SYNC</span> をクリックします</p>
+</li>
+<li>
+<p>さらに、表示される <strong>coffee-shop</strong> アプリケーションの <span class="gray-background">SYNCHRONIZE</span> をクリックします</p>
+</li>
+<li>
+<p><strong>coffee-shop</strong> アプリケーションが同期されます</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>これらのアプリケーションの詳細を確認するには、それぞれのアプリケーションタイルをクリックしてください</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_アプリケーション設定を変更しargocd_で正しく設定されることを確認する"><a class="anchor" href="#_アプリケーション設定を変更しargocd_で正しく設定されることを確認する"></a>8. アプリケーション設定を変更し、ArgoCD で正しく設定されることを確認する</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>ArgoCD はソースとデプロイ先の変更を監視します
+同期されると、ArgoCD は、ArgoCD アプリケーションの構成に応じて、自動的に、または承認を得て、宛先をソースで定義された状態に戻します。
+ArgoCD のデフォルト設定は非常に保守的であり、同期自動化ポリシーはオンになっていません。
+この例では、これらのポリシーをオンにしています。
+この例では、本番の coffee-shop アプリケーションを手動でスケールアップし、ArgoCD がそれを1つのレプリカにスケールダウンするのを確認します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>OpenShift web コンソールに戻ります</p>
+</li>
+<li>
+<p><strong>Administration</strong> パースペクティブでドロップダウンから <strong>プロジェクト: <code>prod-coffeeshop</code></strong> を選択します</p>
+</li>
+<li>
+<p>左のナビゲーションバーで <strong>ワークロード</strong> &#8594; <strong>デプロイメント</strong> を選択します</p>
+</li>
+<li>
+<p><span class="blue">prod-coffee-shop</span> デプロイメントの一番右にある、ケバブ（縦3つの点）メニューをクリックし <strong>Pod 数の編集</strong> をクリックします</p>
+</li>
+<li>
+<p>Plus <strong><span class="big black">&CirclePlus;</span></strong> を4回クリックして、5 pods 設定として保存します。</p>
+</li>
+<li>
+<p>ArgoCD の web コンソールに戻ります</p>
+</li>
+<li>
+<p><strong>Applications</strong> さらに <strong>coffee-shop</strong> アプリケーションタイルをクリックします。</p>
+</li>
+<li>
+<p>ArgoCD Web コンソール上で pod が一時的にスケールアップされ、再度自動的にスケールダウンされ、ソースコードリポジトリに記載された 1 レプリカに戻る様子を確認します。</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>1 レプリカ構成になっていることはこちらから確認が出来ます:  <a href="https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-kustomize/coffee-shop/base/deployment.yaml#L14" class="bare">https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-kustomize/coffee-shop/base/deployment.yaml#L14</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>実際にデプロイされている OpenShift のリソースを確認するために、<span class="gray-background white">REFRESH</span> ボタンをクリックします。</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<h1 id="_オプションラボ新しいログデータの確認" class="sect0"><a class="anchor" href="#_オプションラボ新しいログデータの確認"></a>（オプションラボ）新しいログデータの確認</h1>
+<div class="paragraph">
+<p>いくつかの新しいアプリケーションコンポーネントを <code>prod-coffeeshop</code> 名前空間にデプロイしました。
+ログがどのように変化したかを見てみましょう。</p>
+</div>
+<div class="sect1">
+<h2 id="_prod_coffeeshop_ネームスペースを_clusterlogforwarder_に追加しましょう"><a class="anchor" href="#_prod_coffeeshop_ネームスペースを_clusterlogforwarder_に追加しましょう"></a>1. <code>prod-coffeeshop</code> ネームスペースを <code>ClusterLogForwarder</code> に追加しましょう。</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>OpenShift web コンソールで <strong>管理者</strong> パースペクティブを選択</p>
+</li>
+<li>
+<p>左のパネルで <strong>ホーム</strong> &#8594; <strong>検索</strong> をクリック</p>
+</li>
+<li>
+<p>上部の <strong>プロジェクト:</strong> ドロップダウンで <code>openshift-logging</code> ネームスペースを選択</p>
+</li>
+<li>
+<p><strong>リソース</strong> ドロップダウンで <code>ClusterLogForwarder</code> にチェックを入れます</p>
+</li>
+<li>
+<p><span class="blue-background white">CLF</span> <span class="blue">instance</span> という1つのインスタンスが表示されると思いますので、instace の青いリンクをクリックします</p>
+</li>
+<li>
+<p><strong>YAML</strong> タブをクリック</p>
+</li>
+<li>
+<p>表示される黒いエディター画面の 53行 あたりにある <code>- dev-coffeeshop</code> を見つけます</p>
+</li>
+<li>
+<p><code>- dev-coffeeshop</code> の直後に <code>- prod-coffeeshop</code> を追加します</p>
+</li>
+<li>
+<p>以下の様になります:</p>
+<div class="paragraph">
+<p><span class="image unresolved"><img src="images/logging_prod_coffeeshop_yaml.png" alt="logging prod coffeeshop yaml" width="50%"></span></p>
+</div>
+</li>
+<li>
+<p>保存をクリックし完了です！</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_新しいログを調べる"><a class="anchor" href="#_新しいログを調べる"></a>2. 新しいログを調べる</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Kibana コンソールに移動します。(左のメニューバーから "ネットワーク" → "ルート" で、"場所" へのリンクをクリック)</p>
+</li>
+<li>
+<p><strong>全て</strong> のコーヒーショッププロジェクト、つまり <code>dev-coffeeshop</code> と <code>prod-coffeeshop</code> 両方を対象とするために、新しいインデックスパターンを作成します</p>
+</li>
+<li>
+<p>左のナビゲーションバーで、<strong>Management</strong> をクリックします</p>
+</li>
+<li>
+<p><strong>Index pattern</strong> 次に、<strong>Create index pattern</strong> をクリックし <code>*-coffeeshop-*</code> を追加し、 <strong>Next step</strong> をクリック、さらに <strong>Time Filter</strong> フィールドに <code>@timestamp</code> を選択。 <strong>Cretate index pattern</strong> をクリックします。</p>
+</li>
+<li>
+<p>ナビゲーションバーから <strong>Discover</strong> をクリックします</p>
+</li>
+<li>
+<p>作成した *-coffeeshop-* インデックスパターンと、 <strong>Available Fields</strong> に <code>kubernetes.namespace_name</code> and <code>structured.message</code> を選択します</p>
+</li>
+<li>
+<p><code>dev-coffeeshop</code> ネームスペースと <code>prod-coffeeshop</code> ネームスペースの両方からの結果が表示されます</p>
+</li>
+<li>
+<p>また、クラスターで実行されている <code>Create Order</code> クーロンジョブによって処理されているいくつかの新しいオーダーが表示されます</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<h1 id="_サマリー" class="sect0"><a class="anchor" href="#_サマリー"></a>サマリー</h1>
+<div class="ulist">
+<ul>
+<li>
+<p>ArgoCD を使って Production 用の個別 coffeeshop アプリケーションをデプロイしました。</p>
+</li>
+<li>
+<p>次に、ArgoCD の ApplicationSet を使って二つのアプリケーション、coffee-shop と barista を自動的にデプロイしました。</p>
+</li>
+<li>
+<p>Barista は Knative サービスでした。ArgoCD を使用して Kubernetes Deployments または KnativeServices をデプロイするために特別なアクティビティは必要ありませんでした</p>
+</li>
+<li>
+<p>また、ログに <code>prod-coffeeshop</code> namespace からの結果がどのように表示されるかを確認しました。さらに詳細な分析を行うために、<code>structured.*</code> フィールドにクエリを実行できます</p>
+</li>
+</ul>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="02-pipelines.html">2. OpenShift Pipelines</a></span>
+</nav>
+</article>
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <a class="rhd-logo" href="https://developers.redhat.com" target="_blank"></div>
+</footer>
+<script src="../_/js/vendor/clipboard.js"></script>
+<script src="../_/js/site.js"></script>
+<script async src="../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
