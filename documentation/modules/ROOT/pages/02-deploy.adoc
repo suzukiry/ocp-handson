@@ -1,17 +1,15 @@
 
 :labname: Pipelines
 
-= {labname} Lab
+{labname} Lab
 
-== はじめに
+= はじめに
 
 Red Hat OpenShift Pipelinesは、Kubernetesリソースに基づくクラウドネイティブの継続的インテグレーションおよび継続的デリバリー（CI / CD）ソリューションです。
 
 Tektonビルディングブロックを使用して、基盤となる実装の詳細を抽象化することにより、複数のプラットフォームにわたる展開を自動化します。
 
 Tektonは、Kubernetesディストリビューション間で移植可能なCI / CDパイプラインを定義するためのいくつかの標準カスタムリソース定義（CRD）を導入しています。 
-
-=== ラボ概要
 
 OpenShift Pipelines Operatorはすでにデプロイされているため、すぐに開始できます。
 
@@ -24,10 +22,11 @@ OpenShift Pipelines Operatorはすでにデプロイされているため、す�
 * 簡単なパイプラインのデプロイ
 * ビルドパイプラインのデプロイ
 
+= 準備
 == OpenShift Pipelines のインストール 
 あとで書く。
 
-== tkn コマンドなどのインストール (補足)
+== tkn コマンドなどのインストール （オプション）
 今回のLabでは tkn コマンドは使いませんが、利用イメージをご紹介します。
 
 . tkn コマンドのインストール
