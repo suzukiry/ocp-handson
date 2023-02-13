@@ -136,18 +136,17 @@
 </li>
 </ul>
 </div>
-<h1 id="_準備" class="sect0"><a class="anchor" href="#_準備"></a>準備</h1>
 <div class="sect1">
-<h2 id="_openshift_pipelines_のインストール"><a class="anchor" href="#_openshift_pipelines_のインストール"></a>OpenShift Pipelines のインストール</h2>
+<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>準備</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_openshift_pipelines_のインストール"><a class="anchor" href="#_openshift_pipelines_のインストール"></a>OpenShift Pipelines のインストール</h3>
 <div class="paragraph">
 <p>あとで書く。</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_tkn_コマンドなどのインストール_オプション"><a class="anchor" href="#_tkn_コマンドなどのインストール_オプション"></a>tkn コマンドなどのインストール （オプション）</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_tkn_コマンドなどのインストール_オプション"><a class="anchor" href="#_tkn_コマンドなどのインストール_オプション"></a>tkn コマンドなどのインストール （オプション）</h3>
 <div class="paragraph">
 <p>今回のLabでは tkn コマンドは使いませんが、利用イメージをご紹介します。</p>
 </div>
@@ -213,8 +212,9 @@ export PATH=$PATH:$HOME/tkn</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="_簡単なパイプラインのデプロイ"><a class="anchor" href="#_簡単なパイプラインのデプロイ"></a>簡単なパイプラインのデプロイ</h2>
+<h2 id="sample"><a class="anchor" href="#sample"></a>簡単なパイプラインのデプロイ</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><code>trivial-pipeline</code> プロジェクトの作成</p>
@@ -308,7 +308,7 @@ spec:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_golang_の_2_tier_アプリケーションのデプロイ"><a class="anchor" href="#_golang_の_2_tier_アプリケーションのデプロイ"></a>Golang の 2 Tier アプリケーションのデプロイ</h2>
+<h2 id="createtask"><a class="anchor" href="#createtask"></a>Golang の 2 Tier アプリケーションのデプロイ</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_リソースを定義するタスクを作成する"><a class="anchor" href="#_リソースを定義するタスクを作成する"></a>リソースを定義するタスクを作成する</h3>
@@ -475,7 +475,7 @@ spec:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_workspaceのデータを保存するpersistent_volume_claim_リソースの作成"><a class="anchor" href="#_workspaceのデータを保存するpersistent_volume_claim_リソースの作成"></a>Workspaceのデータを保存する、Persistent Volume Claim リソースの作成</h3>
+<h3 id="createpvc"><a class="anchor" href="#createpvc"></a>Workspaceのデータを保存する、Persistent Volume Claim リソースの作成</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -519,15 +519,15 @@ spec:
       storage: 500Mi</code></pre>
 </div>
 </div>
+<div id="createpipeline" class="paragraph">
+<p>=== 自前のアプリのビルド・デプロイ パイプラインを作成する</p>
+</div>
 </li>
 </ol>
 </div>
 </li>
 </ul>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_自前のアプリのビルドデプロイ_パイプラインを作成する"><a class="anchor" href="#_自前のアプリのビルドデプロイ_パイプラインを作成する"></a>自前のアプリのビルド・デプロイ パイプラインを作成する</h3>
 <div class="paragraph">
 <p>今作成中のパイプラインは３つの大きいセクションと、４つの <strong>Task</strong> で構成されています。
 セクションは以下です。</p>
@@ -686,7 +686,7 @@ spec:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_votingアプリのバックエンドapi用のパイプラインを実行します"><a class="anchor" href="#_votingアプリのバックエンドapi用のパイプラインを実行します"></a>VotingアプリのバックエンドAPI用のパイプラインを実行します</h3>
+<h3 id="runpipeline"><a class="anchor" href="#runpipeline"></a>VotingアプリのバックエンドAPI用のパイプラインを実行します</h3>
 <div class="paragraph">
 <p>さて、お楽しみの時間です！Votingアプリのバックエンド部分のパイプラインを実行してみましょう。</p>
 </div>
