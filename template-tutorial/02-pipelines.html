@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Pipelines Lab :: Template Tutorial</title>
+    <title>Untitled :: Template Tutorial</title>
     <link rel="canonical" href="https://redhat-scholars.github.io/course-template/template-tutorial/02-pipelines.html">
     <meta name="generator" content="Antora 3.0.0">
     <link rel="stylesheet" href="../_/css/site.css">
@@ -86,19 +86,15 @@
 <button class="nav-toggle"></button>
   <a href="index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
-  <ul>
-    <li><a href="index.html">Template Tutorial</a></li>
-    <li><a href="02-pipelines.html">Pipelines Lab</a></li>
-  </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/suzukiry/ocp-handson/edit/master/documentation/modules/ROOT/pages/02-pipelines.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <article class="doc">
-<h1 class="page">Pipelines Lab</h1>
-<div class="sect1">
-<h2 id="_はじめに"><a class="anchor" href="#_はじめに"></a>はじめに</h2>
-<div class="sectionbody">
+<div class="paragraph">
+<p>Pipelines Lab</p>
+</div>
+<h1 id="_はじめに" class="sect0"><a class="anchor" href="#_はじめに"></a>はじめに</h1>
 <div class="paragraph">
 <p>Red Hat OpenShift Pipelinesは、Kubernetesリソースに基づくクラウドネイティブの継続的インテグレーションおよび継続的デリバリー（CI / CD）ソリューションです。</p>
 </div>
@@ -108,8 +104,6 @@
 <div class="paragraph">
 <p>Tektonは、Kubernetesディストリビューション間で移植可能なCI / CDパイプラインを定義するためのいくつかの標準カスタムリソース定義（CRD）を導入しています。</p>
 </div>
-<div class="sect2">
-<h3 id="_ラボ概要"><a class="anchor" href="#_ラボ概要"></a>ラボ概要</h3>
 <div class="paragraph">
 <p>OpenShift Pipelines Operatorはすでにデプロイされているため、すぐに開始できます。</p>
 </div>
@@ -137,20 +131,17 @@
 </li>
 </ul>
 </div>
-</div>
-</div>
-</div>
 <div class="sect1">
-<h2 id="_openshift_pipelines_のインストール"><a class="anchor" href="#_openshift_pipelines_のインストール"></a>OpenShift Pipelines のインストール</h2>
+<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>準備</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_openshift_pipelines_のインストール"><a class="anchor" href="#_openshift_pipelines_のインストール"></a>OpenShift Pipelines のインストール</h3>
 <div class="paragraph">
 <p>あとで書く。</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_tkn_コマンドなどのインストール_補足"><a class="anchor" href="#_tkn_コマンドなどのインストール_補足"></a>tkn コマンドなどのインストール (補足)</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_tkn_コマンドなどのインストール_オプション"><a class="anchor" href="#_tkn_コマンドなどのインストール_オプション"></a>tkn コマンドなどのインストール （オプション）</h3>
 <div class="paragraph">
 <p>今回のLabでは tkn コマンドは使いませんが、利用イメージをご紹介します。</p>
 </div>
@@ -216,8 +207,9 @@ export PATH=$PATH:$HOME/tkn</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="_簡単なパイプラインのデプロイ"><a class="anchor" href="#_簡単なパイプラインのデプロイ"></a>簡単なパイプラインのデプロイ</h2>
+<h2 id="sample"><a class="anchor" href="#sample"></a>簡単なパイプラインのデプロイ</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p><code>trivial-pipeline</code> プロジェクトの作成</p>
@@ -311,7 +303,7 @@ spec:
 </div>
 </div>
 <div class="sect1">
-<h2 id="_golang_の_2_tier_アプリケーションのデプロイ"><a class="anchor" href="#_golang_の_2_tier_アプリケーションのデプロイ"></a>Golang の 2 Tier アプリケーションのデプロイ</h2>
+<h2 id="createtask"><a class="anchor" href="#createtask"></a>Golang の 2 Tier アプリケーションのデプロイ</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_リソースを定義するタスクを作成する"><a class="anchor" href="#_リソースを定義するタスクを作成する"></a>リソースを定義するタスクを作成する</h3>
@@ -478,7 +470,7 @@ spec:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_workspaceのデータを保存するpersistent_volume_claim_リソースの作成"><a class="anchor" href="#_workspaceのデータを保存するpersistent_volume_claim_リソースの作成"></a>Workspaceのデータを保存する、Persistent Volume Claim リソースの作成</h3>
+<h3 id="createpvc"><a class="anchor" href="#createpvc"></a>Workspaceのデータを保存する、Persistent Volume Claim リソースの作成</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -522,15 +514,15 @@ spec:
       storage: 500Mi</code></pre>
 </div>
 </div>
+<div id="createpipeline" class="paragraph">
+<p>=== 自前のアプリのビルド・デプロイ パイプラインを作成する</p>
+</div>
 </li>
 </ol>
 </div>
 </li>
 </ul>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_自前のアプリのビルドデプロイ_パイプラインを作成する"><a class="anchor" href="#_自前のアプリのビルドデプロイ_パイプラインを作成する"></a>自前のアプリのビルド・デプロイ パイプラインを作成する</h3>
 <div class="paragraph">
 <p>今作成中のパイプラインは３つの大きいセクションと、４つの <strong>Task</strong> で構成されています。
 セクションは以下です。</p>
@@ -689,7 +681,7 @@ spec:
 </div>
 </div>
 <div class="sect2">
-<h3 id="_votingアプリのバックエンドapi用のパイプラインを実行します"><a class="anchor" href="#_votingアプリのバックエンドapi用のパイプラインを実行します"></a>VotingアプリのバックエンドAPI用のパイプラインを実行します</h3>
+<h3 id="runpipeline"><a class="anchor" href="#runpipeline"></a>VotingアプリのバックエンドAPI用のパイプラインを実行します</h3>
 <div class="paragraph">
 <p>さて、お楽しみの時間です！Votingアプリのバックエンド部分のパイプラインを実行してみましょう。</p>
 </div>
