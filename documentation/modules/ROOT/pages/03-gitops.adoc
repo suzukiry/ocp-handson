@@ -41,6 +41,7 @@ NOTE: ArgoCD はまだ OpenShift と認証システムが統合されていま�
 prod-coffeeshop
 
 oc label namespace prod-coffeeshop argocd.argoproj.io/managed-by=openshift-gitops
+serverless インストール
 
 == Kustomize の動作確認
 今回の Argo CD によって導入する Application では、Kustomize を利用しています。Kustomize でどのようにマニフェストが管理・変更されているのか確認しましょう。
