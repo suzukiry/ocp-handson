@@ -176,11 +176,8 @@ NOTE: 対象の namespace にラベル付をすることで必要なRoles/Rolebi
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_web_ui_を使った_argocd_へのアクセス"><a class="anchor" href="#_web_ui_を使った_argocd_へのアクセス"></a>Web UI を使った ArgoCD へのアクセス</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_argocd_のuiへのアクセス方法の確認"><a class="anchor" href="#_argocd_のuiへのアクセス方法の確認"></a>ArgoCD のUIへのアクセス方法の確認</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -188,7 +185,7 @@ NOTE: 対象の namespace にラベル付をすることで必要なRoles/Rolebi
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-ArgoCD はまだ OpenShift と認証システムが統合されていません
+ArgoCD はまだ OpenShift のUIと統合されていません
 </td>
 </tr>
 </table>
@@ -234,6 +231,7 @@ ArgoCD はまだ OpenShift と認証システムが統合されていません
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
 <h2 id="kustomize"><a class="anchor" href="#kustomize"></a>Kustomize の動作確認</h2>
 <div class="sectionbody">
@@ -256,9 +254,12 @@ ArgoCD はまだ OpenShift と認証システムが統合されていません
 <p>Kustomizeをインストールします。</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-
-sudo install ./kustomize /usr/bin</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash</code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">sudo install ./kustomize /usr/bin</code></pre>
 </div>
 </div>
 </li>
@@ -284,9 +285,12 @@ sudo install ./kustomize /usr/bin</code></pre>
 <p>レポジトリをクローンします。</p>
 <div class="listingblock console-input">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/RH-OPEN/test-example.git" class="bare">https://github.com/RH-OPEN/test-example.git</a>
-
-cd test-example/coffee-shop-kustomize/coffee-shop</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">git clone <a href="https://github.com/RH-OPEN/test-example.git" class="bare">https://github.com/RH-OPEN/test-example.git</a></code></pre>
+</div>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">cd test-example/coffee-shop-kustomize/coffee-shop</code></pre>
 </div>
 </div>
 </li>
@@ -478,8 +482,7 @@ OpenShift GitOps Operator が稼働するローカルサーバーとなるため
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<code>prod-coffeeshop</code> ネームスペースがきちんと指定されていことに注意してください。
-もし指定しなかった場合、 <code>prod-coffeeshop</code> だけではなく、OpenShift 上の <strong>全ての</strong> アプリケーションが ArgoCD から管理されることになります。
+<code>prod-coffeeshop</code> の namespaceが正しく指定されていることを確認します。もし指定がない場合、 <code>prod-coffeeshop</code> だけではなく、OpenShift 上の <strong>全ての</strong> アプリケーションが ArgoCD から管理されることになります。
 </td>
 </tr>
 </table>
@@ -508,17 +511,8 @@ OpenShift GitOps Operator が稼働するローカルサーバーとなるため
 </div>
 </div>
 <div class="sect1">
-<h2 id="_application_を_production_ネームスペースにデプロイする"><a class="anchor" href="#_application_を_production_ネームスペースにデプロイする"></a>Application を Production ネームスペースにデプロイする</h2>
+<h2 id="_application_を_対象の_namespace_にデプロイする"><a class="anchor" href="#_application_を_対象の_namespace_にデプロイする"></a>Application を 対象の namespace にデプロイする</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p>Coffee Shopには、データベース、Coffee Shopのフロントエンドと注文管理システム、および準備から収集までのすべての注文の状態を管理する Barista サービスの3つのコンポーネントがあります。</p>
-</div>
-<div class="paragraph">
-<p>データベースはすでにデプロイされています。</p>
-</div>
-<div class="paragraph">
-<p>最初にCoffeeShopアプリケーションのフロントエンドコンポーネントのみをデプロイして、ArgoCDの "application" とは何かを理解しましょう。</p>
-</div>
 <div class="paragraph">
 <p>ArgoCD インターフェースには "No applications yet" と表示されていると思います。
 ここでは、ArgoCD インターフェースに貼り付けるための ArgoCD アプリケーションの YAML を提供しています。</p>
@@ -565,18 +559,6 @@ spec:
         maxDuration: 3m # the maximum amount of time allowed for the backoff strategy</code></pre>
 </div>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-アプリの定義に何か問題がある場合は、here: <a href="https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-argocd/coffee-shop.yaml" class="bare">https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-argocd/coffee-shop.yaml</a> からコピーしてください
-</td>
-</tr>
-</table>
-</div>
 </li>
 <li>
 <p><span class="gray-background white">SAVE</span> をクリックします</p>
@@ -598,8 +580,7 @@ spec:
 </ol>
 </div>
 <div class="paragraph">
-<p>アプリケーションコンポーネントが正常にデプロイされたら、アプリケーションを削除します。次の演習で、ApplicationSet という単一のオブジェクトを使って複数のコンポーネントをデプロイするためです。
-<strong>coffee-shop</strong> アプリケーションの  <strong>DELETE</strong> をクリックして <code>coffee-shop</code> アプリケーションを削除します。</p>
+<p>アプリケーションコンポーネントが正常にデプロイされたら、アプリケーションを削除します。<strong>coffee-shop</strong> アプリケーションの  <strong>DELETE</strong> をクリックして <code>coffee-shop</code> アプリケーションを削除します。</p>
 </div>
 </div>
 </div>
