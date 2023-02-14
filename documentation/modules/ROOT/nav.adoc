@@ -9,3 +9,6 @@
 ** xref:02-pipelines.adoc#runpipeline[Pipeline実行]
 
 * xref:03-gitops.adoc[3. OpenShift GitOps]
+** xref:03-gitops.adoc#prerequisite[準備]
+** xref:03-gitops.adoc#kustomize[Kustomize]
+** xref:03-gitops.adoc#gitops[ArgoCD]

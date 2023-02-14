@@ -17,23 +17,23 @@ Tektonは、Kubernetes ディストリビューション間で利用可能な CI
 
 Administrator パースペクティブ　→　OperatorHub から確認します。
 
-. OpenShift Pipelineをインストール
-.. Administratorパースペクティブの下の左側のメニューから、Operators → OperatorHubに移動します。
-.. 検索ボックスで`OpenShift Pipeline`を検索し、 表示された結果から`Red Hat OpenShift Pipelines`をクリックします。
-
+. Administratorパースペクティブの下の左側のメニューから、Operators → OperatorHubに移動します。
+. 検索ボックスで`OpenShift Pipeline`を検索し、 表示された結果から`Red Hat OpenShift Pipelines`をクリックします。
++
 image::pipelines/pipelines-install-1.png[]
++
 image::pipelines/pipelines-install-2.png[]
 
 . 説明ビューで、`Install` をクリックして、すべてのインストール設定を確認します。
-
++
 image::pipelines/pipelines-install-3.png[]
 
 . Update Channelが `latest` に設定されていることを確認し、 `Install` をクリックしてOperatorのインストールを開始します。
-
++
 image::pipelines/pipelines-install-4.png[]
 
 . 数秒後、インストールが正常に完了されたことを確認します。
-
++
 左ペイン のOperators -> Installed Operators の画面の[Status]列を確認することで、インストールステータスが成功であるかどうかを確認できます。
 
 === tkn コマンドなどのインストール （オプション）
