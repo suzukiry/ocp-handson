@@ -36,9 +36,9 @@ oc label namespace prod-coffeeshop argocd.argoproj.io/managed-by=openshift-gitop
 +
 NOTE: 対象の namespace にラベル付をすることで必要なRoles/Rolebindingsが作成されることで、OpenShift GitOps の ServiceAccount が対象 namespace に対してリソースの作成・更新の権限を得ることができます。
 
-== Web UI を使った ArgoCD へのアクセス
+=== ArgoCD のUIへのアクセス方法の確認
 
-NOTE: ArgoCD はまだ OpenShift と認証システムが統合されていません
+NOTE: ArgoCD はまだ OpenShift のUIと統合されていません
 
 . ArgoCD の admin パスワードを取得します:
 .. OpenShift Web コンソールの一番上のドロップダウンメニューから *Project: `openshift-gitops`* を選択します
@@ -65,7 +65,11 @@ NOTE: ArgoCD はまだ OpenShift と認証システムが統合されていま�
 [source,bash,subs="attributes+,+macros"]
 ----
 curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-
+----
++
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
 sudo install ./kustomize /usr/bin
 ----
 
@@ -85,7 +89,11 @@ kustomize version
 [source,bash,subs="attributes+,+macros"]
 ----
 git clone https://github.com/RH-OPEN/test-example.git
-
+----
++
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
 cd test-example/coffee-shop-kustomize/coffee-shop
 ----
 
@@ -198,9 +206,7 @@ image::gitops/argocd_manage_projects.png[width=50%]
 +
 NOTE: OpenShift GitOps Operator が稼働するローカルサーバーとなるため、サーバー名を入力する必要はありません。
 +
-
-NOTE: `prod-coffeeshop` ネームスペースがきちんと指定されていことに注意してください。
-もし指定しなかった場合、 `prod-coffeeshop` だけではなく、OpenShift 上の *全ての* アプリケーションが ArgoCD から管理されることになります。
+NOTE: `prod-coffeeshop` の namespaceが正しく指定されていることを確認します。もし指定がない場合、 `prod-coffeeshop` だけではなく、OpenShift 上の *全ての* アプリケーションが ArgoCD から管理されることになります。
 
 . *Save* をクリック
 . 左のナビゲーションバーから *Manage Applications* アイコンをクリック
@@ -209,13 +215,7 @@ image::gitops/argocd_manage_applications.png[width=50%]
 
 これで、新しい ArgoCD の *applications* を OpenShift のアプリケーション管理に紐づけるための project を作成する事が出来ました。
 
-== Application を Production ネームスペースにデプロイする
-
-Coffee Shopには、データベース、Coffee Shopのフロントエンドと注文管理システム、および準備から収集までのすべての注文の状態を管理する Barista サービスの3つのコンポーネントがあります。
-
-データベースはすでにデプロイされています。
-
-最初にCoffeeShopアプリケーションのフロントエンドコンポーネントのみをデプロイして、ArgoCDの "application" とは何かを理解しましょう。
+== Application を 対象の namespace にデプロイする
 
 ArgoCD インターフェースには "No applications yet" と表示されていると思います。
 ここでは、ArgoCD インターフェースに貼り付けるための ArgoCD アプリケーションの YAML を提供しています。
@@ -259,8 +259,6 @@ spec:
         maxDuration: 3m # the maximum amount of time allowed for the backoff strategy
 ----
 +
-NOTE: アプリの定義に何か問題がある場合は、here: https://github.com/redhat-gpte-devopsautomation/ocp48_hands_on_apps/blob/main/coffee-shop-argocd/coffee-shop.yaml からコピーしてください 
-+
 . [gray-background white]#SAVE# をクリックします
 . アプリケーションを定義するフィールドがどのように入力されているかを観察します
 . [gray-background white]#CREATE# をクリックし、次に [gray-background white]#SYNC# をクリックし、さらに [gray-background white]#SYNCHRONIZE# をクリックします（今回のApplicationは自動同期の設定がされているため、自動でSYNCされます。）
@@ -268,5 +266,4 @@ NOTE: アプリの定義に何か問題がある場合は、here: https://github
 +
 image::gitops/argo-coffee-shop-deploy.png[]
 
-アプリケーションコンポーネントが正常にデプロイされたら、アプリケーションを削除します。次の演習で、ApplicationSet という単一のオブジェクトを使って複数のコンポーネントをデプロイするためです。
-*coffee-shop* アプリケーションの  *DELETE* をクリックして `coffee-shop` アプリケーションを削除します。
+アプリケーションコンポーネントが正常にデプロイされたら、アプリケーションを削除します。*coffee-shop* アプリケーションの  *DELETE* をクリックして `coffee-shop` アプリケーションを削除します。
