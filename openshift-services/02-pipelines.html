@@ -107,40 +107,23 @@
 <h2 id="_はじめに"><a class="anchor" href="#_はじめに"></a>はじめに</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Red Hat OpenShift Pipelinesは、Kubernetesリソースに基づくクラウドネイティブの継続的インテグレーションおよび継続的デリバリー（CI/CD）ソリューションです。</p>
+<p>Red Hat OpenShift Pipelinesは、Kubernetesリソースに基づくクラウドネイティブの CI/CD ソリューションです。</p>
 </div>
 <div class="paragraph">
-<p>Tekton ビルディングブロックを使用して、基盤となる実装の詳細を抽象化することにより、複数のプラットフォームにわたる展開を自動化します。</p>
+<p>Tektonは、Kubernetes ディストリビューション間で利用可能な CI/CD パイプラインを定義するための標準カスタムリソース定義（CRD）を導入しています。</p>
 </div>
 <div class="paragraph">
-<p>Tektonは、Kubernetesディストリビューション間で移植可能なCI / CDパイプラインを定義するためのいくつかの標準カスタムリソース定義（CRD）を導入しています。</p>
-</div>
-<div class="paragraph">
-<p>OpenShift Pipelines Operatorはすでにデプロイされているため、すぐに開始できます。</p>
-</div>
-<div class="paragraph">
-<p>このラボでは、</p>
+<p>このラボでは、以下の作業を実施します。</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>新しいプロジェクトを作成し、1つのパイプラインで "helloworld" という簡単なタスクをデプロイします</p>
+<p>新しいプロジェクトを作成し、1つのパイプラインで "helloworld" という簡単なタスクをデプロイ</p>
 </li>
 <li>
-<p>2層の Golang のアプリケーションを構築およびデプロイするために必要なさまざまなリソースをデプロイします</p>
+<p>2層 (Frontend/Backend) の Golang のアプリケーションを構築およびデプロイするために必要なさまざまなリソースをデプロイ</p>
 </li>
 </ol>
-</div>
-<div class="ulist">
-<div class="title">ゴール</div>
-<ul>
-<li>
-<p>簡単なパイプラインのデプロイ</p>
-</li>
-<li>
-<p>ビルドパイプラインのデプロイ</p>
-</li>
-</ul>
 </div>
 </div>
 </div>
@@ -150,7 +133,68 @@
 <div class="sect2">
 <h3 id="_openshift_pipelines_のインストール"><a class="anchor" href="#_openshift_pipelines_のインストール"></a>OpenShift Pipelines のインストール</h3>
 <div class="paragraph">
-<p>あとで書く。</p>
+<p>Administrator パースペクティブ　→　OperatorHub から確認します。</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>OpenShift Pipelineをインストール</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Administratorパースペクティブの下の左側のメニューから、Operators → OperatorHubに移動します。</p>
+</li>
+<li>
+<p>検索ボックスで`OpenShift Pipeline`を検索し、 表示された結果から`Red Hat OpenShift Pipelines`をクリックします。</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/pipelines/pipelines-install-1.png" alt="pipelines install 1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/pipelines/pipelines-install-2.png" alt="pipelines install 2">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>説明ビューで、<code>Install</code> をクリックして、すべてのインストール設定を確認します。</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/pipelines/pipelines-install-3.png" alt="pipelines install 3">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Update Channelが <code>latest</code> に設定されていることを確認し、 <code>Install</code> をクリックしてOperatorのインストールを開始します。</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/pipelines/pipelines-install-4.png" alt="pipelines install 4">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>数秒後、インストールが正常に完了されたことを確認します。</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>左ペイン のOperators &#8594; Installed Operators の画面の[Status]列を確認することで、インストールステータスが成功であるかどうかを確認できます。</p>
 </div>
 </div>
 <div class="sect2">
