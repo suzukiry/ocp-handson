@@ -78,7 +78,19 @@
 </ul>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="03-gitops.html">3. OpenShift GitOps</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#prerequisite">準備</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#kustomize">Kustomize</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="#gitops">ArgoCD</a>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -106,19 +118,10 @@
 <h2 id="_はじめに"><a class="anchor" href="#_はじめに"></a>はじめに</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>このラボでは、GitOpsオペレーターをデプロイし、それを使用してCoffeeShopアプリケーションを <code>prod-coffeeshop</code> プロジェクトにデプロイします。 Coffee-Shopアプリケーションは、YAMLマニフェストおよびkustomizeファイルとしてgitリポジトリに保存されます。 kustomizeがどのように機能するかの詳細については、そのgitリポジトリを調べる必要があります。</p>
+<p>このラボでは、OpenShift GitOps を活用し、アプリケーションを特定のプロジェクトにデプロイします。このデプロイでは、GitOps のコンセプトのもと、OpenShift GitOps がアプリケーションのYAMLマニフェストを起点とし、同期的にアプリケーションをデプロイする様子を確認します。</p>
 </div>
 <div class="paragraph">
-<p>まず、ArgoCDをデプロイして、ウェブインターフェースにアクセスします。次に、コーヒーショップアプリケーションのフロントエンドのArgoCDアプリケーション定義をコピーしてインターフェースに貼り付け、展開を確認します。先に進み、デプロイ後にそのアプリケーションを削除します。</p>
-</div>
-<div class="paragraph">
-<p>次に、複雑なアプリケーションのセットを複数のクラスターにデプロイできるApplicationSetについて説明しますが、ここではローカルクラスターにのみデプロイします。 ApplicationSetsを使用して、cofee-shop のフロントエンドコンポーネントだけでなく、Barista サーバレスアプリケーションを含む全てのアプリケーションを 1つのオブジェクトとしてデプロイします。</p>
-</div>
-<div class="paragraph">
-<p>最後に、OpenShift クラスター上のアプリケーションに手動で変更を加え、ArgoCD がアプリケーションを gitops リポジトリに記載されている通りにリカバリする様子を観察します。</p>
-</div>
-<div class="paragraph">
-<p>では始めましょう！</p>
+<p>テストアプリケーションは、YAMLマニフェストおよびkustomizeファイルとしてgitリポジトリに保存されています。本ハンズオンではkustomizeがどのように機能するかの詳細については、そのgitリポジトリを調べる必要があります。</p>
 </div>
 </div>
 </div>
@@ -203,14 +206,13 @@ ArgoCD はまだ OpenShift と認証システムが統合されていません
 <p>prod-coffeeshop</p>
 </div>
 <div class="paragraph">
-<p>oc label namespace prod-coffeeshop argocd.argoproj.io/managed-by=openshift-gitops
-serverless インストール</p>
+<p>oc label namespace prod-coffeeshop argocd.argoproj.io/managed-by=openshift-gitops</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_kustomize_の動作確認"><a class="anchor" href="#_kustomize_の動作確認"></a>Kustomize の動作確認</h2>
+<h2 id="kustomize"><a class="anchor" href="#kustomize"></a>Kustomize の動作確認</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>今回の Argo CD によって導入する Application では、Kustomize を利用しています。Kustomize でどのようにマニフェストが管理・変更されているのか確認しましょう。</p>
@@ -400,7 +402,7 @@ kustomization.yamlを確認した通りの差分があるか確認しましょ�
 </div>
 </div>
 <div class="sect1">
-<h2 id="_coffee_shop_app_project_の準備"><a class="anchor" href="#_coffee_shop_app_project_の準備"></a>Coffee-Shop "App Project" の準備</h2>
+<h2 id="gitops"><a class="anchor" href="#gitops"></a>Coffee-Shop "App Project" の準備</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>

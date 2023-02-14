@@ -79,7 +79,19 @@
 </ul>
   </li>
   <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="03-gitops.html">3. OpenShift GitOps</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-gitops.html#prerequisite">準備</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-gitops.html#kustomize">Kustomize</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="03-gitops.html#gitops">ArgoCD</a>
+  </li>
+</ul>
   </li>
 </ul>
   </li>
@@ -138,20 +150,10 @@
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>OpenShift Pipelineをインストール</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
 <p>Administratorパースペクティブの下の左側のメニューから、Operators → OperatorHubに移動します。</p>
 </li>
 <li>
 <p>検索ボックスで`OpenShift Pipeline`を検索し、 表示された結果から`Red Hat OpenShift Pipelines`をクリックします。</p>
-</li>
-</ol>
-</div>
-</li>
-</ol>
-</div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/pipelines/pipelines-install-1.png" alt="pipelines install 1">
@@ -162,39 +164,30 @@
 <img src="_images/pipelines/pipelines-install-2.png" alt="pipelines install 2">
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>説明ビューで、<code>Install</code> をクリックして、すべてのインストール設定を確認します。</p>
-</li>
-</ol>
-</div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/pipelines/pipelines-install-3.png" alt="pipelines install 3">
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>Update Channelが <code>latest</code> に設定されていることを確認し、 <code>Install</code> をクリックしてOperatorのインストールを開始します。</p>
-</li>
-</ol>
-</div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/pipelines/pipelines-install-4.png" alt="pipelines install 4">
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>数秒後、インストールが正常に完了されたことを確認します。</p>
-</li>
-</ol>
-</div>
 <div class="paragraph">
 <p>左ペイン のOperators &#8594; Installed Operators の画面の[Status]列を確認することで、インストールステータスが成功であるかどうかを確認できます。</p>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect2">
