@@ -2,27 +2,39 @@
 
 == はじめに
 
-Red Hat OpenShift Pipelinesは、Kubernetesリソースに基づくクラウドネイティブの継続的インテグレーションおよび継続的デリバリー（CI/CD）ソリューションです。
+Red Hat OpenShift Pipelinesは、Kubernetesリソースに基づくクラウドネイティブの CI/CD ソリューションです。
 
-Tekton ビルディングブロックを使用して、基盤となる実装の詳細を抽象化することにより、複数のプラットフォームにわたる展開を自動化します。
+Tektonは、Kubernetes ディストリビューション間で利用可能な CI/CD パイプラインを定義するための標準カスタムリソース定義（CRD）を導入しています。 
 
-Tektonは、Kubernetesディストリビューション間で移植可能なCI / CDパイプラインを定義するためのいくつかの標準カスタムリソース定義（CRD）を導入しています。 
+このラボでは、以下の作業を実施します。
 
-OpenShift Pipelines Operatorはすでにデプロイされているため、すぐに開始できます。
-
-このラボでは、
-
-. 新しいプロジェクトを作成し、1つのパイプラインで "helloworld" という簡単なタスクをデプロイします
-. 2層の Golang のアプリケーションを構築およびデプロイするために必要なさまざまなリソースをデプロイします
-
-.ゴール
-* 簡単なパイプラインのデプロイ
-* ビルドパイプラインのデプロイ
+. 新しいプロジェクトを作成し、1つのパイプラインで "helloworld" という簡単なタスクをデプロイ
+. 2層 (Frontend/Backend) の Golang のアプリケーションを構築およびデプロイするために必要なさまざまなリソースをデプロイ
 
 [#prerequisite]
 == 準備
 === OpenShift Pipelines のインストール 
-あとで書く。
+
+Administrator パースペクティブ　→　OperatorHub から確認します。
+
+. OpenShift Pipelineをインストール
+.. Administratorパースペクティブの下の左側のメニューから、Operators → OperatorHubに移動します。
+.. 検索ボックスで`OpenShift Pipeline`を検索し、 表示された結果から`Red Hat OpenShift Pipelines`をクリックします。
+
+image::pipelines/pipelines-install-1.png[]
+image::pipelines/pipelines-install-2.png[]
+
+. 説明ビューで、`Install` をクリックして、すべてのインストール設定を確認します。
+
+image::pipelines/pipelines-install-3.png[]
+
+. Update Channelが `latest` に設定されていることを確認し、 `Install` をクリックしてOperatorのインストールを開始します。
+
+image::pipelines/pipelines-install-4.png[]
+
+. 数秒後、インストールが正常に完了されたことを確認します。
+
+左ペイン のOperators -> Installed Operators の画面の[Status]列を確認することで、インストールステータスが成功であるかどうかを確認できます。
 
 === tkn コマンドなどのインストール （オプション）
 今回のLabでは tkn コマンドは使いませんが、利用イメージをご紹介します。
