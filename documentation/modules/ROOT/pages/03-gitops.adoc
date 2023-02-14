@@ -7,13 +7,34 @@
 テストアプリケーションは、YAMLマニフェストおよびkustomizeファイルとしてgitリポジトリに保存されています。本ハンズオンではkustomizeがどのように機能するかの詳細については、そのgitリポジトリを調べる必要があります。
 
 [#prerequisite]
-== GitOps Operator のインストールと確認
+== 準備
+=== GitOps Operator のインストールと確認
 
 メールに記載されているユーザー名とパスワードを使用して、OpenShiftクラスターのWebコンソールにログインします。
 
 . Aministrator パースペクティブから、*Operator* -> *Operator Hub* を選択します。
 . *Filter by keyword...* ボックスに `openshift gitops` と入力し、*Red Hat OpenShift GitOps* タイルをクリックします。
 . *Install* さらにもう一度 *Install* をクリックします。その際、オプションは全てデフォルト設定のままとします。
+
+=== Project 作成
+
+==== Project の作成
+今回テストアプリを配置先の Project を作成します。
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc project prod-coffeeshop
+----
+
+==== Roles/Rolebindings の設定
+OpenShift GitOps がリソースを作成できるように Roles/Rolebindings の設定を追加します。
+[.console-input]
+[source,bash,subs="attributes+,+macros"]
+----
+oc label namespace prod-coffeeshop argocd.argoproj.io/managed-by=openshift-gitops
+----
++
+NOTE: 対象の namespace にラベル付をすることで必要なRoles/Rolebindingsが作成されることで、OpenShift GitOps の ServiceAccount が対象 namespace に対してリソースの作成・更新の権限を得ることができます。
 
 == Web UI を使った ArgoCD へのアクセス
 
@@ -28,13 +49,6 @@ NOTE: ArgoCD はまだ OpenShift と認証システムが統合されていま�
 .. 左のナビゲーションバーで *Networking* -> *Route* をクリックします
 .. *場所* 欄にいくつかリンクが表示されていますが、3番目に表示されている  [青い]#openshift-gitops-server# に対する場所のリンクをクリックします
 . ArgoCD の web ui に Username `admin` と先程クリップボードにコピーしたパスワードでログインします
-
-=== Project 作成
-
-prod-coffeeshop
-
-oc label namespace prod-coffeeshop argocd.argoproj.io/managed-by=openshift-gitops
-
 
 [#kustomize]
 == Kustomize の動作確認
@@ -165,12 +179,10 @@ diff -su <(kustomize build base) <(kustomize build overlays/production)
 NOTE: kustomization.yamlを確認した通りの差分があるか確認しましょう。
 
 [#gitops]
-== Coffee-Shop "App Project" の準備
+== OpenShift GitOps の設定・同期
 
-* コーヒーショップアプリケーション専用の新しい "App Project" を作成します。  
-* ArgoCDのユーザーインターフェイスは少し扱いにくい場合があるため、注意深く指示に従って操作してください  
-* あるステップでミスした場合、問題ない様に思えるデフォルト設定のいくつかが実際には正常に適応されていない可能性があります  
-* これは実際にはセキュリティ機能です。 "すべてを許可" していることを確認してください。  
+=== サマリー
+* テストアプリケーション専用の新しい "App Project" を作成します。  
 
 . 左側のナビゲーションパネルにある歯車のアイコンを使用して、ArgoCD Webコンソールから AppProject 管理インターフェイスにアクセスします。
 +
@@ -197,7 +209,7 @@ image::gitops/argocd_manage_applications.png[width=50%]
 
 これで、新しい ArgoCD の *applications* を OpenShift のアプリケーション管理に紐づけるための project を作成する事が出来ました。
 
-== Coffee Shop Application を Production ネームスペースにデプロイする
+== Application を Production ネームスペースにデプロイする
 
 Coffee Shopには、データベース、Coffee Shopのフロントエンドと注文管理システム、および準備から収集までのすべての注文の状態を管理する Barista サービスの3つのコンポーネントがあります。
 
