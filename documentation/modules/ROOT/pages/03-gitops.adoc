@@ -18,7 +18,7 @@
 
 === Project 作成
 
-==== Project の作成
+.Project の作成
 今回テストアプリを配置先の Project を作成します。
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
@@ -26,7 +26,7 @@
 oc project prod-coffeeshop
 ----
 
-==== Roles/Rolebindings の設定
+. Roles/Rolebindings の設定
 OpenShift GitOps がリソースを作成できるように Roles/Rolebindings の設定を追加します。
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
