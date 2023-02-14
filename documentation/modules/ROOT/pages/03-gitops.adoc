@@ -18,8 +18,10 @@
 
 === Project 作成
 
-.Project の作成
+. Project の作成
++
 今回テストアプリを配置先の Project を作成します。
++
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
@@ -27,7 +29,9 @@ oc project prod-coffeeshop
 ----
 
 . Roles/Rolebindings の設定
++
 OpenShift GitOps がリソースを作成できるように Roles/Rolebindings の設定を追加します。
++
 [.console-input]
 [source,bash,subs="attributes+,+macros"]
 ----
@@ -38,7 +42,7 @@ NOTE: 対象の namespace にラベル付をすることで必要なRoles/Rolebi
 
 === ArgoCD のUIへのアクセス方法の確認
 
-NOTE: ArgoCD はまだ OpenShift のUIと統合されていません
+ArgoCD はまだ OpenShift のUIと統合されていないため、ArgoCD UI　へのアクセス方法をこちらで確認します。
 
 . ArgoCD の admin パスワードを取得します:
 .. OpenShift Web コンソールの一番上のドロップダウンメニューから *Project: `openshift-gitops`* を選択します
