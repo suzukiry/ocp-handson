@@ -126,8 +126,10 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>GitOps Operator のインストールと確認</h2>
+<h2 id="prerequisite"><a class="anchor" href="#prerequisite"></a>準備</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_gitops_operator_のインストールと確認"><a class="anchor" href="#_gitops_operator_のインストールと確認"></a>GitOps Operator のインストールと確認</h3>
 <div class="paragraph">
 <p>メールに記載されているユーザー名とパスワードを使用して、OpenShiftクラスターのWebコンソールにログインします。</p>
 </div>
@@ -143,6 +145,36 @@
 <p><strong>Install</strong> さらにもう一度 <strong>Install</strong> をクリックします。その際、オプションは全てデフォルト設定のままとします。</p>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_project_作成"><a class="anchor" href="#_project_作成"></a>Project 作成</h3>
+<div class="sect3">
+<h4 id="_project_の作成"><a class="anchor" href="#_project_の作成"></a>Project の作成</h4>
+<div class="paragraph">
+<p>今回テストアプリを配置先の Project を作成します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc project prod-coffeeshop</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_rolesrolebindings_の設定"><a class="anchor" href="#_rolesrolebindings_の設定"></a>Roles/Rolebindings の設定</h4>
+<div class="paragraph">
+<p>OpenShift GitOps がリソースを作成できるように Roles/Rolebindings の設定を追加します。</p>
+</div>
+<div class="listingblock console-input">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">oc label namespace prod-coffeeshop argocd.argoproj.io/managed-by=openshift-gitops</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>+
+NOTE: 対象の namespace にラベル付をすることで必要なRoles/Rolebindingsが作成されることで、OpenShift GitOps の ServiceAccount が対象 namespace に対してリソースの作成・更新の権限を得ることができます。</p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -199,15 +231,6 @@ ArgoCD はまだ OpenShift と認証システムが統合されていません
 <p>ArgoCD の web ui に Username <code>admin</code> と先程クリップボードにコピーしたパスワードでログインします</p>
 </li>
 </ol>
-</div>
-<div class="sect2">
-<h3 id="_project_作成"><a class="anchor" href="#_project_作成"></a>Project 作成</h3>
-<div class="paragraph">
-<p>prod-coffeeshop</p>
-</div>
-<div class="paragraph">
-<p>oc label namespace prod-coffeeshop argocd.argoproj.io/managed-by=openshift-gitops</p>
-</div>
 </div>
 </div>
 </div>
@@ -402,21 +425,14 @@ kustomization.yamlを確認した通りの差分があるか確認しましょ�
 </div>
 </div>
 <div class="sect1">
-<h2 id="gitops"><a class="anchor" href="#gitops"></a>Coffee-Shop "App Project" の準備</h2>
+<h2 id="gitops"><a class="anchor" href="#gitops"></a>OpenShift GitOps の設定・同期</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_サマリー"><a class="anchor" href="#_サマリー"></a>サマリー</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>コーヒーショップアプリケーション専用の新しい "App Project" を作成します。</p>
-</li>
-<li>
-<p>ArgoCDのユーザーインターフェイスは少し扱いにくい場合があるため、注意深く指示に従って操作してください</p>
-</li>
-<li>
-<p>あるステップでミスした場合、問題ない様に思えるデフォルト設定のいくつかが実際には正常に適応されていない可能性があります</p>
-</li>
-<li>
-<p>これは実際にはセキュリティ機能です。 "すべてを許可" していることを確認してください。</p>
+<p>テストアプリケーション専用の新しい "App Project" を作成します。</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -490,8 +506,9 @@ OpenShift GitOps Operator が稼働するローカルサーバーとなるため
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="_coffee_shop_application_を_production_ネームスペースにデプロイする"><a class="anchor" href="#_coffee_shop_application_を_production_ネームスペースにデプロイする"></a>Coffee Shop Application を Production ネームスペースにデプロイする</h2>
+<h2 id="_application_を_production_ネームスペースにデプロイする"><a class="anchor" href="#_application_を_production_ネームスペースにデプロイする"></a>Application を Production ネームスペースにデプロイする</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Coffee Shopには、データベース、Coffee Shopのフロントエンドと注文管理システム、および準備から収集までのすべての注文の状態を管理する Barista サービスの3つのコンポーネントがあります。</p>
